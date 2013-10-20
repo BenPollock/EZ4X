@@ -1,27 +1,52 @@
-<div class="jumbotron">
+<div class="jumbotron" style="">
 	<div class="container">
 		<h1>EZFX</h1>
 		<p>EZ4X is a revolutionary application, allowing for the development of automatic forex trading algorithms.  Simply pick your technical indicators, risk tolerance, and currency pairs, and prepare to beat the market!</p>
+		<p><a data-toggle="modal" href="#signin" class="btn btn-primary btn-lg" href="#signin">Sign In</a></p>
 	</div>
 </div>
 
+<div class="container">
+	<div class="row">
+		<div class="col-md-6"><h1>Do Stuff</h1></div>
+		<div class="col-md-6"><img src="http://learntotradethemarket.com/wp-content/uploads/forex.jpg" class="img-responsive"/></div>
+	</div>
+	<div class="row">
+		<div class="col-md-6"><img src="http://learntotradethemarket.com/wp-content/uploads/forex.jpg" class="img-responsive"/></div>
+		<div class="col-md-6"><h1>Do More Stuff</h1></div>
+	</div>
+</div>
+
+<div class="modal fade" id="signin">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title">Sign In</h4>
+      </div>
+      <div class="modal-body">
+        <p><h2>Sign in</h2>
+
+		<%= form_for(resource, :as => resource_name, :url => session_path(resource_name)) do |f| %>
+		  <div><%= f.label :email %><br />
+		  <%= f.email_field :email, :autofocus => true %></div>
+
+		  <div><%= f.label :password %><br />
+		  <%= f.password_field :password %></div>
+
+		  <% if devise_mapping.rememberable? -%>
+		    <div><%= f.check_box :remember_me %> <%= f.label :remember_me %></div>
+		  <% end -%>
+
+		  <div><%= f.submit "Sign in" %></div>
+		<% end %>
+
+		<%= render "devise/shared/links" %></p>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
 
 <div class="container">
-<h2>Sign in</h2>
-
-<%= form_for(resource, :as => resource_name, :url => session_path(resource_name)) do |f| %>
-  <div><%= f.label :email %><br />
-  <%= f.email_field :email, :autofocus => true %></div>
-
-  <div><%= f.label :password %><br />
-  <%= f.password_field :password %></div>
-
-  <% if devise_mapping.rememberable? -%>
-    <div><%= f.check_box :remember_me %> <%= f.label :remember_me %></div>
-  <% end -%>
-
-  <div><%= f.submit "Sign in" %></div>
-<% end %>
-
-<%= render "devise/shared/links" %>
 </div>
