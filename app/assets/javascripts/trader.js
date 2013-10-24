@@ -1,57 +1,68 @@
 
 $(function() {
-	$.getJSON('http://www.highcharts.com/samples/data/jsonp.php?filename=new-intraday.json&callback=?', function(data) {
+	Highcharts.setOptions({
+		global : {
+			useUTC : false
+		}
+	});
+	
+	// Create the chart
+	$('#container').highcharts('StockChart', {
+		chart : {
+			events : {
+				load : function() {
 
-		// create the chart
-		$('#container').highcharts('StockChart', {
-			
+					// set up the updating of the chart each second
+					var series = this.series[0];
+					setInterval(function() {
+						var x = (new Date()).getTime(), // current time
+						y = Math.round(Math.random() * 100);
+						series.addPoint([x, y], true, true);
+					}, 1000);
+				}
+			}
+		},
+		
+		rangeSelector: {
+			buttons: [{
+				count: 1,
+				type: 'minute',
+				text: '1M'
+			}, {
+				count: 5,
+				type: 'minute',
+				text: '5M'
+			}, {
+				type: 'all',
+				text: 'All'
+			}],
+			inputEnabled: false,
+			selected: 0
+		},
+		
+		title : {
+			text : 'Live random data'
+		},
+		
+		exporting: {
+			enabled: false
+		},
+		
+		series : [{
+			name : 'Random data',
+			data : (function() {
+				// generate an array of random data
+				var data = [], time = (new Date()).getTime(), i;
 
-			title: {
-				text: 'Mockup'
-			},
-			
-			xAxis: {
-				gapGridLineWidth: 0
-			},
-			
-			rangeSelector : {
-				buttons : [{
-					type : 'hour',
-					count : 1,
-					text : '1h'
-				}, {
-					type : 'day',
-					count : 1,
-					text : '1D'
-				}, {
-					type : 'all',
-					count : 1,
-					text : 'All'
-				}],
-				selected : 1,
-				inputEnabled : false
-			},
-			
-			series : [{
-				name : 'Mockup',
-				type: 'area',
-				data : data,
-				gapSize: 5,
-				tooltip: {
-					valueDecimals: 2
-				},
-				fillColor : {
-					linearGradient : {
-						x1: 0, 
-						y1: 0, 
-						x2: 0, 
-						y2: 1
-					},
-					stops : [[0, Highcharts.getOptions().colors[0]], [1, 'rgba(0,0,0,0)']]
-				},
-				threshold: null
-			}]
-		});
+				for( i = -999; i <= 0; i++) {
+					data.push([
+						time + i * 1000,
+						Math.round(Math.random() * 100)
+					]);
+				}
+				return data;
+			})()
+		}]
 	});
 	$('.slider').slider();
 });
