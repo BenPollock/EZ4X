@@ -1,3 +1,4 @@
+
 $(function() {
 	$.getJSON('http://www.highcharts.com/samples/data/jsonp.php?filename=new-intraday.json&callback=?', function(data) {
 
@@ -52,4 +53,5 @@ $(function() {
 			}]
 		});
 	});
+	$('.slider').slider();
 });
