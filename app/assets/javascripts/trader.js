@@ -14,10 +14,24 @@ $(function() {
 
 					// set up the updating of the chart each second
 					var series = this.series[0];
+					var flags = this.series[1];
 					setInterval(function() {
-						var x = (new Date()).getTime(), // current time
+						var a = (new Date()).getTime(), // current time
 						y = Math.round(Math.random() * 100);
-						series.addPoint([x, y], true, true);
+						series.addPoint([a, y], true, true);
+						if(y < 20){
+							flags.addPoint({
+								title: "Buy",
+								x: a
+							});
+							buy();
+						}
+						if(y > 80){
+							flags.addPoint({
+								title: "Sell",
+								x: a
+							});
+						}
 					}, 1000);
 				}
 			}
@@ -61,8 +75,19 @@ $(function() {
 					]);
 				}
 				return data;
-			})()
+			})(),
+			id: 'dataseries'
+		},{
+			type: 'flags',
+			data: [],
+			onSeries: 'dataseries',
+			shape: 'circlepin',
+			width: 30
 		}]
 	});
 	$('.slider').slider();
 });
+
+function buy(){
+	//alert("buy");
+}
