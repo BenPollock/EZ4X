@@ -6,7 +6,7 @@ $(function() {
 			
 
 			title: {
-				text: 'AAPL stock price by minute'
+				text: 'Mockup'
 			},
 			
 			xAxis: {
@@ -32,7 +32,7 @@ $(function() {
 			},
 			
 			series : [{
-				name : 'AAPL',
+				name : 'Mockup',
 				type: 'area',
 				data : data,
 				gapSize: 5,

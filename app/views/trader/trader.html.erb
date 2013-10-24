@@ -1,7 +1,69 @@
-<div class="container">
-	Thank you for signing in!
+<nav class="navbar navbar-default" role="navigation">
+	 <div class="navbar-header">
+    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+      <span class="sr-only">Toggle navigation</span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </button>
+    <a class="navbar-brand" href="#">EZFX</a>
+  </div>
 
-	<br><br>
-	<%= link_to 'Logout', destroy_user_session_path, :method=>'delete' %>
+    <!-- Collect the nav links, forms, and other content for toggling -->
+  <div class="collapse navbar-collapse navbar-ex1-collapse">
+    <ul class="nav navbar-nav">
+      <li class="active"><a href="#">Forex Trader</a></li>
+      <li><a href="#">Trade History</a></li>
+    </ul>
+    <ul class="nav navbar-nav navbar-right">
+      <li><a href="#">Welcome <%= current_user.email %></a></li>
+      <li><%= link_to 'Logout', destroy_user_session_path, :method=>'delete' %></li>
+    </ul>
+  </div><!-- /.navbar-collapse -->
+
+</nav>
+
+<div class="container">
 	<div id= "container" style="height: 500px; min-width: 500px"></div>
+</div>
+<div class="container">
+	<div class="row">
+		<div class="col-md-4">
+			<form class="form-horizontal" role="form">
+				<div class="form-group">
+					<label class="col-lg-6 control-label" for="money">Starting Money</label>
+					<div class="col-lg-6">
+						<input type="number" class="form-control" id="money" value="50000">
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-lg-6 control-label" for="currency">Currency Pair</label>
+					<div class="col-lg-6">
+						<select class="form-control" id="currency">
+							<option value="1" selected>EUR/USD</option>
+							<option value="2">USD/JPY</option>
+							<option value="3">GBP/USD</option>
+						</select>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-lg-6 control-label" for="leverage">Leverage</label>
+					<div class="col-lg-6">
+						<select class="form-control" id="leverage">
+							<option value="1">1:1</option>
+							<option value="2">50:1</option>
+							<option value="3" selected>100:1</option>
+							<option value="4">200:1</option>
+						</select>
+					</div>
+				</div>
+				<div class="col-lg-6"></div>
+				<div class="col-lg-6">
+					<button type="button" class="btn btn-primary">New Session</button>
+				</div>
+			</form>
+		</div>
+		<div class="col-md-8">
+		</div>
+	</div>
 </div>
