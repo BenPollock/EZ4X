@@ -27,6 +27,10 @@
 	<div id= "container" style="height: 500px; min-width: 500px"></div>
 </div>
 <div class="container">
+	<div class="alert alert-info alert-dismissable">
+		<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+  		Auto Trade Executed: Buy 500 EURO for 690.10 USD @ <%= Time.now.localtime %>
+	</div>
 	<div class="row">
 		<div class="col-md-4">
 			<form class="form-horizontal" role="form">
@@ -63,7 +67,7 @@
 				</div>
 			</form>
 		</div>
-		<div class="col-md-6 col-md-offset-1">
+		<div class="col-md-6">
 			<form class="form-horizontal" role="form">
 				<div class="form-group">
 					<div class="col-lg-3">
@@ -111,6 +115,12 @@
 					</div>
 				</div>
 			</form>
+		</div>
+		<div class ="col-md-2 well">
+			<h4>Positions:</h4>
+			<p>Cash: $20000</p>
+			<p>2000 EUR = $2760.40</p>
+			<p>Earnings: $200</p>
 		</div>
 	</div>
 </div>
