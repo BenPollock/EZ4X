@@ -100,6 +100,24 @@ $(function() {
 			onSeries: 'dataseries',
 			shape: 'circlepin',
 			width: 30
+		},
+		{
+			name : 'Random data 2',
+			data : (function() {
+			// generate an array of random data
+			var data = [], time = (new Date()).getTime(), i;
+
+			for( i = -999; i <= 0; i++) {
+				data.push([
+					time + i * 1000,
+					//Math.round(Math.random() * 100)
+					EUR
+				]);
+				EUR += Math.floor(Math.random() * 3) - 1;
+			}
+			return data;
+			})(),
+			id: 'dataseries2'
 		}]
 	});
 	$('.slider').slider();
