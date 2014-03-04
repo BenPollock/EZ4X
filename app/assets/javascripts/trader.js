@@ -13,6 +13,7 @@ $(function() {
 				load : function() {
 
 					// set up the updating of the chart each second
+					//TODO: change this with pinging the server
 					var series = this.series[0];
 					var flags = this.series[1];
 					var low_in_a_row = 0;
@@ -33,12 +34,14 @@ $(function() {
 						}
 						
 						series.addPoint([a, y], true, true);
+
+						//Set the buy/sell flags
 						if(low_in_a_row > 2){
 							flags.addPoint({
 								title: "Buy",
 								x: a
 							});
-							buy();
+							buy("EURUSD", 500); //Temporary Values
 						}
 						if(up_in_a_row > 2){
 							flags.addPoint({
@@ -123,11 +126,25 @@ $(function() {
 	$('.slider').slider();
 });
 
-function buy(){
-	//alert("buy");
+function buy(currency, quantity){
+	//initiate the trade to the backend
+	$.ajax({
+		type: "POST",
+		url: "trader/buy",
+		data: {currency: currency, quantity: quantity},
+		success: function(){
+			//TODO: update front end
+			console.log("Success!!");
+		}
+	});
+
 }
 
 function sell(){
+
+}
+
+function calcBuySell(){
 
 }
 
