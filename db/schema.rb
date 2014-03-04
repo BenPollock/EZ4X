@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140128185100) do
+ActiveRecord::Schema.define(version: 20140304234636) do
 
   create_table "models", force: true do |t|
     t.string   "email",                  default: "", null: false
@@ -32,7 +32,7 @@ ActiveRecord::Schema.define(version: 20140128185100) do
   add_index "models", ["reset_password_token"], name: "index_models_on_reset_password_token", unique: true
 
   create_table "positions", force: true do |t|
-    t.integer  "session_id"
+    t.integer  "tsession_id"
     t.string   "currency"
     t.decimal  "value"
     t.integer  "units"
@@ -45,19 +45,19 @@ ActiveRecord::Schema.define(version: 20140128185100) do
     t.datetime "updated_at"
   end
 
-  create_table "sessions", force: true do |t|
-    t.integer  "user_id"
-    t.integer  "trade_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.decimal  "cash"
-  end
-
   create_table "trades", force: true do |t|
-    t.integer  "quote_id"
     t.integer  "units"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "tsession_id"
+  end
+
+  create_table "tsessions", force: true do |t|
+    t.integer  "user_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.decimal  "cash"
+    t.string   "currency"
   end
 
   create_table "users", force: true do |t|

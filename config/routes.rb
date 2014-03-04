@@ -4,6 +4,7 @@ EZ4X::Application.routes.draw do
   devise_for :users
   root 'trader#trader'
   post 'trader/buy' => 'trader#buy'
+  get 'tsessions/create' => 'tsessions#create'
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 

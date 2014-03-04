@@ -159,3 +159,20 @@ function calcRSI(){
 function calcMACD(){
 
 }
+
+function initSession(){
+	//This will create a new session on button click.  Ideally we should keep the previous in case the user refreshes,
+	//but this can be implemented later.
+
+	var cash = $("#money").val();
+
+	//create the session
+	$.ajax({
+		type: "POST",
+		url: "session/create",
+		data: {cash: cash},
+		success: function(){
+			console.log("Session success!");
+		}
+	});
+}
