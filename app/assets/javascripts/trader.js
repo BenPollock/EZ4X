@@ -169,7 +169,7 @@ function initSession(){
 	//create the session
 	$.ajax({
 		type: "POST",
-		url: "session/create",
+		url: "tsessions/create",
 		data: {cash: cash},
 		success: function(){
 			console.log("Session success!");

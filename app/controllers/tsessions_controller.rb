@@ -15,6 +15,7 @@ class TsessionsController < ApplicationController
 				format.json {render :json => {}}
 			else
 				render status: 500
+			end
 		end
 
 
