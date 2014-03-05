@@ -41,7 +41,7 @@ $(function() {
 								title: "Buy",
 								x: a
 							});
-							buy("EURUSD", 500); //Temporary Values
+							//buy("EURUSD", 500); //Temporary Values
 						}
 						if(up_in_a_row > 2){
 							flags.addPoint({
