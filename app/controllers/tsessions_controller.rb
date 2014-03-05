@@ -5,7 +5,7 @@ class TsessionsController < ApplicationController
 		@tsession = Tsession.new
 		@tsession.user_id = current_user.id
 		begin
-			@tsession.cash = params[:cash].to_f
+			@tsession.cash = params[:cash].to_i * 100
 		rescue
 			render status: 500
 		end
