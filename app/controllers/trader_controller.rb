@@ -31,7 +31,7 @@ class TraderController < ApplicationController
 		@tsession.save
 
 		if Position.exists? (['tsession_id = ?', tsessionid])
-			@position = Position.where("tsession_id = ?", tsessionid).find(1)
+			@position = Position.where("tsession_id = ?", tsessionid).first
 			@position.units = @position.units.to_i + quantity.to_i
 			@position.save
 			#need to update position table
@@ -44,7 +44,7 @@ class TraderController < ApplicationController
 
 
 		respond_to do |format|
-			format.json {render :json => {}}
+			format.json {render :json => @tsession.cash}
 			#format.json {render :json => @currency}
 		end
 	end

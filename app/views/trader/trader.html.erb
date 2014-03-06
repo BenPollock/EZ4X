@@ -24,7 +24,23 @@
 </nav>
 
 <div class="container">
-	<div id= "container" style="height: 500px; min-width: 500px"></div>
+	<div class="row">
+		<div class="col-md-10">
+			<div id= "container" style="height: 500px; min-width: 500px"></div>
+		</div>
+		<div class ="col-md-2 well">
+			<h4>Positions:</h4>
+			<p id="cashdisplay">Cash: $20000</p>
+			<p>2000 EUR = $2760.40</p>
+			<p>Earnings: $200</p>
+			<br>Manual Controls
+			<div class="form-group">
+				<input type="number" class="form-control" id="buyamount" placeholder = "Number of Units"><br>
+				<button type="button" class="btn btn-primary" id="manualbuy">Buy</button>
+				<button type="button" class="btn btn-primary" id="manualsell">Sell</button>
+			</div>
+		</div>
+	</div>
 </div>
 <div class="container">
 	<div class="alert alert-info alert-dismissable">
@@ -67,26 +83,21 @@
 				</div>
 			</form>
 		</div>
-		<div class="col-md-6">
+		<div class="col-md-7 col-md-offset-1">
 			<form class="form-horizontal" role="form">
 				<div class="form-group">
-					<div class="col-lg-3">
-						<div class="make-switch switch-large">
-							<input type="checkbox" checked>
-						</div>
-					</div>
-					<label class="col-lg-7 control-label" for="bollinger">Bollinger Bands</label>
+					<label class="col-lg-7 control-label" for="bollinger" style="text-align:left;">Bollinger Bands</label>
 					<div class="col-lg-2">
 						<input type="number" class="form-control" id="bollinger" value="10">
 					</div>
-				</div>
-				<div class="form-group">
 					<div class="col-lg-3">
 						<div class="make-switch switch-large">
 							<input type="checkbox" checked>
 						</div>
 					</div>
-					<label class="col-lg-3 control-label" for="macds">MACD</label>
+				</div>
+				<div class="form-group">
+					<label class="col-lg-3 control-label" for="macds" style="text-align:left;">MACD</label>
 					<div class="col-lg-2">
 						<input type="number" class="form-control" id="macds" value="12">
 					</div>
@@ -96,31 +107,30 @@
 					<div class="col-lg-2">
 						<input type="number" class="form-control" id="macde" value="9">
 					</div>
-				</div>
-				<div class="form-group">
 					<div class="col-lg-3">
 						<div class="make-switch switch-large">
 							<input type="checkbox" checked>
 						</div>
 					</div>
-					<label class="col-lg-7 control-label" for="rsi">Relative Strength Index</label>
+				</div>
+				<div class="form-group">
+					<label class="col-lg-7 control-label" for="rsi" style="text-align:left;">Relative Strength Index</label>
 					<div class="col-lg-2">
 						<input type="number" class="form-control" id="rsi" value="10">
 					</div>
+					<div class="col-lg-3">
+						<div class="make-switch switch-large">
+							<input type="checkbox" checked>
+						</div>
+					</div>
 				</div>
 				<div class="form-group">
-					<label class="col-lg-7 control-label">Risk Tolerance</label>
+					<label class="col-lg-7 control-label" style="text-align:left;">Risk Tolerance</label>
 					<div class="col-lg-5">
 						<input type="text" class="slider form-control" value="" data-slider-min="0" data-slider-max="10" data-slider-step="1" data-slider-value="5" data-slider-orientation="horizontal"/>
 					</div>
 				</div>
 			</form>
-		</div>
-		<div class ="col-md-2 well">
-			<h4>Positions:</h4>
-			<p>Cash: $20000</p>
-			<p>2000 EUR = $2760.40</p>
-			<p>Earnings: $200</p>
 		</div>
 	</div>
 	<br><br>

@@ -124,17 +124,25 @@ $(function() {
 		}]
 	});
 	$('.slider').slider();
+
+	//Manual buy/sell controls
+	$("#manualbuy").on("click", function(){
+		var quantity = $("#buyamount").val();
+		buy(quantity);
+	});
 });
 
-function buy(currency, quantity){
+
+function buy(quantity){
 	//initiate the trade to the backend
 	$.ajax({
 		type: "POST",
 		url: "trader/buy",
-		data: {currency: currency, quantity: quantity},
-		success: function(){
+		data: {quantity: quantity},
+		success: function(data){
 			//TODO: update front end
 			console.log("Success!!");
+			updateDisplay(data);
 		}
 	});
 
@@ -161,8 +169,7 @@ function calcMACD(){
 }
 
 function initSession(){
-	//This will create a new session on button click.  Ideally we should keep the previous in case the user refreshes,
-	//but this can be implemented later.
+	//This will create a new session on button click
 
 	var cash = $("#money").val();
 
@@ -173,6 +180,14 @@ function initSession(){
 		data: {cash: cash},
 		success: function(){
 			console.log("Session success!");
+			//update front end
+			//$("#cashdisplay").html(cash)
+			updateDisplay(cash);
 		}
 	});
+
+}
+
+function updateDisplay(cash){
+	$("#cashdisplay").html("Cash: $" + cash);
 }
