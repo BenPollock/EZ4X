@@ -22,11 +22,17 @@ class TsessionsController < ApplicationController
 	def latest
 		respond_to do |format|
 			#Get the latest session if it exists
+			@position = Position.new
+			@position.units = 0
+			@Tsession = "empty"
 			if Tsession.exists? (['user_id = ?', current_user.id])
 				@Tsession = Tsession.where("user_id = ?", current_user.id).order("created_at DESC").first
-				format.json {render :json => @Tsession.cash}
+				if Position.exists? (['tsession_id = ?', @Tsession.id])
+					@position = Position.where("tsession_id = ?", @Tsession.id).first
+				end
+				format.json {render :json => {empty: "no", cash: @Tsession.cash, position: @position.units}}
 			else
-				format.json {render :json => {empty: "empty"}}
+				format.json {render :json => {empty: "empty", position: @position.units}}
 			end
 		end
 

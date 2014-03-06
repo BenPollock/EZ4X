@@ -17,6 +17,7 @@ class TraderController < ApplicationController
 		#Create trade in database
 		@trade = Trade.new
 		@trade.units = quantity.to_i
+
 		#Get the most recent session under the user
 		tsessionid = Tsession.where("user_id = ?", current_user.id).order("created_at DESC").first.id
 		@trade.tsession_id = tsessionid
@@ -27,7 +28,13 @@ class TraderController < ApplicationController
 		@tsession = Tsession.find(tsessionid)
 		#Get most recent quote for @tession.currency
 		#Temporarily set it to 13735
-		@tsession.cash = @tsession.cash.to_i - (quantity.to_i * 13735).to_i
+
+		#If quantity is positive, use ask, else use bid
+		if quantity.to_i >= 0
+			@tsession.cash = @tsession.cash.to_i - (quantity.to_i * 13729).to_i
+		else
+			@tsession.cash = @tsession.cash.to_i - (quantity.to_i * 13727).to_i
+		end
 		@tsession.save
 
 		if Position.exists? (['tsession_id = ?', tsessionid])
@@ -44,7 +51,7 @@ class TraderController < ApplicationController
 
 
 		respond_to do |format|
-			format.json {render :json => @tsession.cash}
+			format.json {render :json => {cash: @tsession.cash, position: @position.units}}
 			#format.json {render :json => @currency}
 		end
 	end

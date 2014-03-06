@@ -48,7 +48,7 @@ $(function() {
 								title: "Sell",
 								x: a
 							});
-							sell();
+							//sell();
 						}
 					}, 1000);
 				}
@@ -173,6 +173,10 @@ $(function() {
 		var quantity = $("#buyamount").val();
 		buy(quantity);
 	});
+	$("#manualsell").on("click", function(){
+		var quantity = $("#buyamount").val();
+		sell(quantity);
+	});
 
 	reloadSession();
 });
@@ -187,14 +191,26 @@ function buy(quantity){
 		success: function(data){
 			//TODO: update front end
 			console.log("Success!!");
-			updateDisplay(data);
+			updateDisplay(data.cash, data.position);
 		}
 	});
 
 }
 
-function sell(){
-
+function sell(quantity){
+	//initiate the trade to the backend
+	var quantitynegative = parseInt(quantity);
+	quantitynegative = quantitynegative * -1;
+	$.ajax({
+		type: "POST",
+		url: "trader/buy",
+		data: {quantity: quantitynegative},
+		success: function(data){
+			//TODO: update front end
+			console.log("Success!!");
+			updateDisplay(data.cash, data.position);
+		}
+	});
 }
 
 function calcBuySell(){
@@ -223,7 +239,7 @@ function initSession(){
 		url: "tsessions/create",
 		data: {cash: cash},
 		success: function(cash){
-				updateDisplay(cash);
+				updateDisplay(cash, "0");
 		}
 	});
 
@@ -238,7 +254,7 @@ function reloadSession(){
 		url: "tsessions/latest",
 		success: function(data){
 			if(!(data.empty == "empty"))
-				updateDisplay(data);
+				updateDisplay(data.cash, data.position);
 			else
 				alert("You have no session!");
 		}
@@ -246,8 +262,9 @@ function reloadSession(){
 
 }
 
-function updateDisplay(cash){
+function updateDisplay(cash, position){
 	var decimalcash = cash.toString();
 	var decimalcash = decimalcash.substring(0, decimalcash.length-4) + "." + decimalcash.substring(decimalcash.length-4, decimalcash.length)
 	$("#cashdisplay").html("Cash: $" + decimalcash);
+	$("#positiondisplay").html("Positions: " + position + "EUR");
 }
