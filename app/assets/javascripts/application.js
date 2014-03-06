@@ -15,4 +15,5 @@
 //= require turbolinks
 //= require bootstrap.min
 //= require highstock
+//= require technical-indicators
 //= require_tree .

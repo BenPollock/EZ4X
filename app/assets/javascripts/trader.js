@@ -79,6 +79,26 @@ $(function() {
 		exporting: {
 			enabled: false
 		},
+
+		yAxis: [{
+                title: {
+                    text: 'Price'
+                },
+                height: 200,
+                plotLines: [{
+                    value: 0,
+                    width: 1,
+                    color: '#808080'
+                }]
+            }, {
+                title: {
+                    text: 'MACD'
+                },
+                top: 300,
+                height: 100,
+                offset: 0,
+                lineWidth: 2
+            }],
 		
 		series : [{
 			name : 'Random data',
@@ -121,7 +141,30 @@ $(function() {
 			return data;
 			})(),
 			id: 'dataseries2'
-		}]
+		},
+		{
+			name : 'MACD',
+            linkedTo: 'dataseries',
+            yAxis: 1,
+            showInLegend: true,
+            type: 'trendline',
+            algorithm: 'MACD'
+
+        }, {
+            name : 'Signal line',
+            linkedTo: 'dataseries',
+            yAxis: 1,
+            showInLegend: true,
+            type: 'trendline',
+            algorithm: 'signalLine'
+
+        }, {
+            name: 'Histogram',
+            linkedTo: 'dataseries',
+            yAxis: 1,
+            showInLegend: true,
+            type: 'histogram'
+        }]
 	});
 	$('.slider').slider();
 
