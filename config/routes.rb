@@ -5,6 +5,7 @@ EZ4X::Application.routes.draw do
   root 'trader#trader'
   post 'trader/buy' => 'trader#buy'
   post 'tsessions/create' => 'tsessions#create'
+  get  'tsessions/latest' => 'tsessions#latest'
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 

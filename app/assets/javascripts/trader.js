@@ -130,6 +130,8 @@ $(function() {
 		var quantity = $("#buyamount").val();
 		buy(quantity);
 	});
+
+	reloadSession();
 });
 
 
@@ -178,9 +180,7 @@ function initSession(){
 		url: "tsessions/create",
 		data: {cash: cash},
 		success: function(){
-			console.log("Session success!");
-			//update front end
-			updateDisplay(cash);
+				updateDisplay(cash);
 		}
 	});
 
@@ -193,10 +193,11 @@ function reloadSession(){
 	$.ajax({
 		type: "GET",
 		url: "tsessions/latest",
-		success: function(){
-			console.log("Session success!");
-			//update front end
-			updateDisplay(cash);
+		success: function(data){
+			if(!(data.empty == "empty"))
+				updateDisplay(data);
+			else
+				alert("You have no session!");
 		}
 	});
 

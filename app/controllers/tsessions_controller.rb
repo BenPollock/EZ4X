@@ -17,7 +17,18 @@ class TsessionsController < ApplicationController
 				render status: 500
 			end
 		end
+	end
 
+	def latest
+		respond_to do |format|
+			#Get the latest session if it exists
+			if Tsession.exists? (['user_id = ?', current_user.id])
+				@Tsession = Tsession.where("user_id = ?", current_user.id).order("created_at DESC").first
+				format.json {render :json => @Tsession.cash}
+			else
+				format.json {render :json => {empty: "empty"}}
+			end
+		end
 
 	end
 
