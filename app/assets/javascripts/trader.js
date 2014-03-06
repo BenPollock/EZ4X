@@ -16,8 +16,10 @@ $(function() {
 					//TODO: change this with pinging the server
 					var series = this.series[0];
 					var flags = this.series[1];
+					var series2 = this.series[2];
 					var low_in_a_row = 0;
 					var up_in_a_row = 0;
+					//This updates the chart
 					setInterval(function() {
 						var a = (new Date()).getTime(); // current time
 
@@ -34,6 +36,9 @@ $(function() {
 						}
 						
 						series.addPoint([a, y], true, true);
+						series2.addPoint([a, y-2], true, true);
+
+						
 
 						//Set the buy/sell flags
 						if(low_in_a_row > 2){
