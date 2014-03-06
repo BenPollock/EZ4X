@@ -30,10 +30,13 @@ class TraderController < ApplicationController
 		#Temporarily set it to 13735
 
 		#If quantity is positive, use ask, else use bid
+		@rate = 0
 		if quantity.to_i >= 0
 			@tsession.cash = @tsession.cash.to_i - (quantity.to_i * 13729).to_i
+			@rate = 13729
 		else
 			@tsession.cash = @tsession.cash.to_i - (quantity.to_i * 13727).to_i
+			@rate = 13727
 		end
 		@tsession.save
 
@@ -51,7 +54,7 @@ class TraderController < ApplicationController
 
 
 		respond_to do |format|
-			format.json {render :json => {cash: @tsession.cash, position: @position.units}}
+			format.json {render :json => {cash: @tsession.cash, position: @position.units, rate: @rate}}
 			#format.json {render :json => @currency}
 		end
 	end

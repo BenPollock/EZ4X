@@ -95,9 +95,18 @@ $(function() {
                     text: 'MACD'
                 },
                 top: 300,
-                height: 100,
+                height: 50,
                 offset: 0,
                 lineWidth: 2
+            },
+            {
+            	title: {
+            		text: 'RSI'
+            	},
+            	top: 350,
+            	height: 50,
+            	offset: 0,
+            	lineWidth: 2
             }],
 		
 		series : [{
@@ -143,6 +152,60 @@ $(function() {
 			id: 'dataseries2'
 		},
 		{
+			name : 'Bollinger Upper',
+			data : (function() {
+			// generate an array of random data
+			var data = [], time = (new Date()).getTime(), i;
+
+			for( i = -999; i <= 0; i++) {
+				data.push([
+					time + i * 1000,
+					//Math.round(Math.random() * 100)
+					13800
+				]);
+			}
+			return data;
+			})(),
+			showInLegend: true,
+			id: 'bollingerupper'
+		},
+		{
+			name : 'Bollinger Mid',
+			data : (function() {
+			// generate an array of random data
+			var data = [], time = (new Date()).getTime(), i;
+
+			for( i = -999; i <= 0; i++) {
+				data.push([
+					time + i * 1000,
+					//Math.round(Math.random() * 100)
+					13793
+				]);
+			}
+			return data;
+			})(),
+			showInLegend: true,
+			id: 'bollingermid'
+		},
+		{
+			name : 'Bollinger Lower',
+			data : (function() {
+			// generate an array of random data
+			var data = [], time = (new Date()).getTime(), i;
+
+			for( i = -999; i <= 0; i++) {
+				data.push([
+					time + i * 1000,
+					//Math.round(Math.random() * 100)
+					13783
+				]);
+			}
+			return data;
+			})(),
+			id: 'bollingerlower',
+			showInLegend: true
+		},
+		{
 			name : 'MACD',
             linkedTo: 'dataseries',
             yAxis: 1,
@@ -164,6 +227,25 @@ $(function() {
             yAxis: 1,
             showInLegend: true,
             type: 'histogram'
+        },
+        {
+        	name : 'RSI',
+			data : (function() {
+			// generate an array of random data
+			var data = [], time = (new Date()).getTime(), i;
+
+			for( i = -999; i <= 0; i++) {
+				data.push([
+					time + i * 1000,
+					//Math.round(Math.random() * 100)
+					50
+				]);
+			}
+			return data;
+			})(),
+			yAxis: 2,
+			id: 'rsi',
+			showInLegend: true
         }]
 	});
 	$('.slider').slider();
@@ -189,8 +271,9 @@ function buy(quantity){
 		url: "trader/buy",
 		data: {quantity: quantity},
 		success: function(data){
-			//TODO: update front end
-			console.log("Success!!");
+			var dataratedecimal = data.rate.toString();
+			dataratedecimal = dataratedecimal.substring(0, dataratedecimal.length-4) + "." + dataratedecimal.substring(dataratedecimal.length-4, dataratedecimal.length);
+			$("#tradealert").html("Manual Trade Executed: Buy " + quantity + " EUR @ " + dataratedecimal + "USD");
 			updateDisplay(data.cash, data.position);
 		}
 	});
@@ -206,8 +289,9 @@ function sell(quantity){
 		url: "trader/buy",
 		data: {quantity: quantitynegative},
 		success: function(data){
-			//TODO: update front end
-			console.log("Success!!");
+			var dataratedecimal = data.rate.toString();
+			dataratedecimal = dataratedecimal.substring(0, dataratedecimal.length-4) + "." + dataratedecimal.substring(dataratedecimal.length-4, dataratedecimal.length);
+			$("#tradealert").html("Manual Trade Executed: Sell " + quantity + " EUR @ " + dataratedecimal + "USD");
 			updateDisplay(data.cash, data.position);
 		}
 	});

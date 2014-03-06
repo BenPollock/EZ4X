@@ -43,9 +43,8 @@
 	</div>
 </div>
 <div class="container">
-	<div class="alert alert-info alert-dismissable">
-		<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-  		Auto Trade Executed: Buy 500 EURO for 690.10 USD @ <%= Time.now.localtime %>
+	<div class="alert alert-info" id="tradealert">
+  		Trade Ticker
 	</div>
 	<div class="row">
 		<div class="col-md-4">
@@ -59,7 +58,7 @@
 				<div class="form-group">
 					<label class="col-lg-6 control-label" for="currency">Currency Pair</label>
 					<div class="col-lg-6">
-						<select class="form-control" id="currency">
+						<select class="form-control" id="currency" disabled>
 							<option value="1" selected>EUR/USD</option>
 							<option value="2">USD/JPY</option>
 							<option value="3">GBP/USD</option>
@@ -69,7 +68,7 @@
 				<div class="form-group">
 					<label class="col-lg-6 control-label" for="leverage">Leverage</label>
 					<div class="col-lg-6">
-						<select class="form-control" id="leverage">
+						<select class="form-control" id="leverage" disabled>
 							<option value="1">1:1</option>
 							<option value="2">50:1</option>
 							<option value="3" selected>100:1</option>
