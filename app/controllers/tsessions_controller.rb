@@ -5,14 +5,14 @@ class TsessionsController < ApplicationController
 		@tsession = Tsession.new
 		@tsession.user_id = current_user.id
 		begin
-			@tsession.cash = params[:cash].to_i * 100
+			@tsession.cash = params[:cash].to_i * 10000
 		rescue
 			render status: 500
 		end
 
 		respond_to do |format|
 			if @tsession.save
-				format.json {render :json => {}}
+				format.json {render :json => @tsession.cash}
 			else
 				render status: 500
 			end

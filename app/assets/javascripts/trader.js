@@ -179,7 +179,7 @@ function initSession(){
 		type: "POST",
 		url: "tsessions/create",
 		data: {cash: cash},
-		success: function(){
+		success: function(cash){
 				updateDisplay(cash);
 		}
 	});
@@ -204,5 +204,7 @@ function reloadSession(){
 }
 
 function updateDisplay(cash){
-	$("#cashdisplay").html("Cash: $" + cash);
+	var decimalcash = cash.toString();
+	var decimalcash = decimalcash.substring(0, decimalcash.length-4) + "." + decimalcash.substring(decimalcash.length-4, decimalcash.length)
+	$("#cashdisplay").html("Cash: $" + decimalcash);
 }
