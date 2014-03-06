@@ -1,3 +1,6 @@
+var MACD_data;
+var MACD_signal; //yes, a global variable, sue me
+
 
 $(function() {
 	Highcharts.setOptions({
@@ -38,10 +41,13 @@ $(function() {
 						series.addPoint([a, y], true, true);
 						series2.addPoint([a, y-2], true, true);
 
-						
+						calcBuySell (MACD_data, MACD_signal);
+
+
+
 
 						//Set the buy/sell flags
-						if(low_in_a_row > 2){
+						/*if(low_in_a_row > 2){
 							flags.addPoint({
 								title: "Buy",
 								x: a
@@ -54,7 +60,7 @@ $(function() {
 								x: a
 							});
 							//sell();
-						}
+						}*/
 					}, 1000);
 				}
 			}
@@ -302,7 +308,16 @@ function sell(quantity){
 	});
 }
 
-function calcBuySell(){
+//Currently only using MACD
+function calcBuySell(MACD_data, MACD_signal){
+	var latestdata = parseInt(MACD_data[999][1]);
+	var latestsignal = parseInt(MACD_signal[999][1]);
+
+	//Check for buy
+	if (latestdata < 0 && latestsignal < latestdata)
+		buy(1000);
+	if (latestsignal > 0 && latestsignal > latestdata)
+		sell(1000);
 
 }
 
@@ -314,9 +329,10 @@ function calcRSI(){
 
 }
 
-function calcMACD(){
+//Handled by technical indicators js
+/*function calcMACD(){
 
-}
+}*/
 
 //This will create a new session on button click
 function initSession(){

@@ -200,7 +200,8 @@
 
 			}
 		}
-
+		MACD_data = MACD;
+		MACD_signal = signalLine;
 		return [MACD, signalLine, histogram];
 	}
 
