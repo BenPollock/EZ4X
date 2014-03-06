@@ -168,9 +168,8 @@ function calcMACD(){
 
 }
 
+//This will create a new session on button click
 function initSession(){
-	//This will create a new session on button click
-
 	var cash = $("#money").val();
 
 	//create the session
@@ -181,7 +180,22 @@ function initSession(){
 		success: function(){
 			console.log("Session success!");
 			//update front end
-			//$("#cashdisplay").html(cash)
+			updateDisplay(cash);
+		}
+	});
+
+}
+
+//Gets the most recent session on page load
+function reloadSession(){
+
+	//get the session
+	$.ajax({
+		type: "GET",
+		url: "tsessions/latest",
+		success: function(){
+			console.log("Session success!");
+			//update front end
 			updateDisplay(cash);
 		}
 	});
