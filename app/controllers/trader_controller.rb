@@ -1,5 +1,8 @@
 class TraderController < ApplicationController
   	before_filter :authenticate_user!
+  	require 'net/http'
+  	require 'json'
+
 	def trader
 	end
 
@@ -30,13 +33,35 @@ class TraderController < ApplicationController
 		#Temporarily set it to 13735
 
 		#If quantity is positive, use ask, else use bid
+		#@data = JSON.load("http://ez4x-rates.herokuapp.com/Convert?symbol=EURUSD")
+		resp = Net::HTTP.get_response(URI.parse("http://ez4x-rates.herokuapp.com/Convert?symbol=EURUSD"))
+		data = JSON.parse(resp.body)
+
+		askstring = String.try_convert(data["Ask"])
+		bidstring = String.try_convert(data["Bid"])
+
+
+		#Remove decimal
+		askstring = askstring.delete ('.')
+		bidstring = bidstring.delete ('.')
+
+		#Remove extra digit (we can change this later)
+		askstring = askstring[0, 5]
+		bidstring = bidstring[0, 5]
+
+		@askrate = askstring.to_i
+		@bidrate = bidstring.to_i
+
+
+
 		@rate = 0
 		if quantity.to_i >= 0
-			@tsession.cash = @tsession.cash.to_i - (quantity.to_i * 13729).to_i
-			@rate = 13729
+			#@tsession.cash = @tsession.cash.to_i - (quantity.to_i * 13729).to_i
+			@tsession.cash = @tsession.cash.to_i - (quantity.to_i * @askrate).to_i
+			@rate = @askrate
 		else
-			@tsession.cash = @tsession.cash.to_i - (quantity.to_i * 13727).to_i
-			@rate = 13727
+			@tsession.cash = @tsession.cash.to_i - (quantity.to_i * @bidrate).to_i
+			@rate = @bidrate
 		end
 		@tsession.save
 

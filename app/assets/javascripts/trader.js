@@ -30,16 +30,34 @@ $(function() {
 						y = EUR + change;
 						EUR = y;
 
-						if(change < 0){
-							low_in_a_row++;
-							up_in_a_row = 0;
-						}else if (change > 0){
-							up_in_a_row++;
-							low_in_a_row = 0;
-						}
-						
-						series.addPoint([a, y], true, true);
-						series2.addPoint([a, y-2], true, true);
+						//Get the buy and sell from the API
+						/*$.getJSON("http://ez4x-rates.herokuapp.com/Convert?symbol=EURUSD", function(data){
+							var yy = data;
+						})*/
+						$.ajax({
+							type: "GET",
+							dataType: 'json',
+							url: "http://ez4x-rates.herokuapp.com/Convert?symbol=EURUSD",
+							success: function(data){
+								var bidstring = data.Bid.toString();
+								var askstring = data.Ask.toString();
+								//Remove the demical, as the quotes are stored as integers
+								//Also drop the last decimal, usually only goes up until 4 demicals
+								bidstring = bidstring.substring(0, 1) + bidstring.substring(2, 6);
+								askstring = askstring.substring(0, 1) + askstring.substring(2, 6);
+
+								var bidint = parseInt(bidstring);
+								var askint = parseInt(askstring);
+
+								series.addPoint([a, askint], true, true);
+								series2.addPoint([a, bidint], true, true);
+
+
+							}
+						});
+
+						//series.addPoint([a, y], true, true);
+						//series2.addPoint([a, y-2], true, true);
 
 						calcBuySell (MACD_data, MACD_signal);
 
@@ -61,7 +79,7 @@ $(function() {
 							});
 							//sell();
 						}*/
-					}, 1000);
+					}, 5000);
 				}
 			}
 		},
@@ -84,7 +102,7 @@ $(function() {
 		},
 		
 		title : {
-			text : 'EUR/USD Fake Data'
+			text : 'EUR/USD REAL!! Data'
 		},
 		
 		exporting: {
@@ -121,7 +139,7 @@ $(function() {
             }],
 		
 		series : [{
-			name : 'Random data',
+			name : 'Ask',
 			data : (function() {
 				// generate an array of random data
 				var data = [], time = (new Date()).getTime(), i;
@@ -145,7 +163,7 @@ $(function() {
 			width: 30
 		},
 		{
-			name : 'Random data 2',
+			name : 'Bid',
 			data : (function() {
 			// generate an array of random data
 			var data = [], time = (new Date()).getTime(), i;
