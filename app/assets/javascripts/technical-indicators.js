@@ -36,7 +36,7 @@
 
 			var xData = this.linkedParent.xData,
 				yData = this.linkedParent.yData,
-				periods = this.options.periods || 100,		// Set this to what default? should be defaults for each algorithm.
+				periods = this.options.periods || 5,		// Set this to what default? should be defaults for each algorithm.
 				algorithm = this.options.algorithm || 'linear';
 
 			return this[algorithm](xData, yData, periods);
@@ -87,6 +87,11 @@
 		linear: function (xData, yData, periods) {
 
 			return linear(xData, yData, periods);
+		},
+
+		//Added by Ben Pollock to calculate Bollinger Upper
+		bollingerUpper: function(xData, yData, periods){
+			return bollingerUpper(xData, yData, periods);
 		}
 
 	});
@@ -273,6 +278,27 @@
 	}
 
 
+	//Added by Ben Pollock to calculate Bollinger Upper
+	function bollingerUpper (xData, yData, periods){
+		var periodArr = [],
+			bollingerUpperLine = [],
+			length = yData.length;
+
+		var smLine = SMA(xData, yData, periods);
+
+		for (var i = 0; i < length; i ++){
+			periodArr.push(yData[i]);
+			if(periods == periodArr.length){
+				bollingerUpperLine.push([xData[i], smLine[i][1] + STDEV(periodArr)]);
+				periodArr.splice(0,1);
+			}else{
+				bollingerUpperLine.push([xData[i], null]);
+			}
+		}
+
+		return bollingerUpperLine;
+	}
+
 	/* Function based on the idea of an exponential moving average.
 	 * 
 	 * Formula: EMA = Price(t) * k + EMA(y) * (1 - k)
@@ -367,6 +393,20 @@
 			}
 		}
 		return smLine;
+	}
+
+	//Calculates standard deviation, added by Ben Pollock
+	function STDEV (arr) {
+		var average = arrayAvg(arr);
+		var arrtemp = [];
+		var i = arr.length;
+		while (i--){
+
+			arrtemp[i] = arr[i] - average;
+			arrtemp[i] = arrtemp[i] * arrtemp[i];
+		}
+		var variance = arrayAvg(arrtemp);
+		return Math.sqrt(variance);
 	}
 
 	/* Function that returns average of an array's values.

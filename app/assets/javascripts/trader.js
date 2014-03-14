@@ -30,10 +30,6 @@ $(function() {
 						y = EUR + change;
 						EUR = y;
 
-						//Get the buy and sell from the API
-						/*$.getJSON("http://ez4x-rates.herokuapp.com/Convert?symbol=EURUSD", function(data){
-							var yy = data;
-						})*/
 						$.ajax({
 							type: "GET",
 							dataType: 'json',
@@ -45,6 +41,12 @@ $(function() {
 								//Also drop the last decimal, usually only goes up until 4 demicals
 								bidstring = bidstring.substring(0, 1) + bidstring.substring(2, 6);
 								askstring = askstring.substring(0, 1) + askstring.substring(2, 6);
+
+								//Check to see if a 0 was left off by the API (leaves off least significant 0's)
+								if(bidstring.length < 5)
+									bidstring = bidstring + "0";
+								if (askstring.length < 5)
+									askstring = askstring + "0";
 
 								var bidint = parseInt(bidstring);
 								var askint = parseInt(askstring);
@@ -182,20 +184,10 @@ $(function() {
 		},
 		{
 			name : 'Bollinger Upper',
-			data : (function() {
-			// generate an array of random data
-			var data = [], time = (new Date()).getTime(), i;
-
-			for( i = -999; i <= 0; i++) {
-				data.push([
-					time + i * 1000,
-					//Math.round(Math.random() * 100)
-					13800
-				]);
-			}
-			return data;
-			})(),
-			showInLegend: true,
+			linkedTo: 'dataseries',
+            showInLegend: true,
+            type: 'trendline',
+            algorithm: 'bollingerUpper',
 			id: 'bollingerupper'
 		},
 		{
