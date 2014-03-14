@@ -4,6 +4,8 @@ var BOL_upperask;
 var BOL_upperbid;
 var BOL_lowerask;
 var BOL_lowerbid;
+var weekend = true;
+var initialArrayLength = 0;  //the number of quotes found before the app start time
 
 
 $(function() {
@@ -147,18 +149,37 @@ $(function() {
 		series : [{
 			name : 'Ask',
 			data : (function() {
-				// generate an array of random data
-				var data = [], time = (new Date()).getTime(), i;
+				//Generate old data if forex market is closed
+				if (weekend){
+					//var startDate = new Date(2014, 3, 14, 4, 40, 0, 0);
+					//var endDate = new Date(2014, 3, 14, 5, 0, 0, 0);
 
-				for( i = -999; i <= 0; i++) {
-					data.push([
-						time + i * 1000,
-						//Math.round(Math.random() * 100)
-						EUR
-					]);
-					EUR += Math.floor(Math.random() * 3) - 1;
+					var askdata = [];
+					$.ajax({
+							type: "GET",
+							dataType: 'json',
+							async: false, //This is bad practice, but a replacement for callbacks in the interim
+							url: "http://ez4x-rates.herokuapp.com/History?symbol=eurusd&from=2014-03-14%2016:40:00&to=2014-03-14%2017:00:00",
+							success: function(data){
+
+								initialArrayLength = data.Rate.length;
+								for (var i = 0; i < data.Rate.length; i++){
+									var askstring = data.Rate[i].Ask.toString();
+									askstring = askstring.substring(0, 1) + askstring.substring(2, 6);
+									//Check to see if a 0 was left off by the API (leaves off least significant 0's)
+									if (askstring.length < 5)
+										askstring = askstring + "0";
+									var askint = parseInt(askstring);
+									var lastdate = new Date(data.Rate[i].Last).getTime();
+									askdata.push([lastdate, askint]);
+								}
+							}
+					});
+					return askdata;
+
+				}else{
+					return null;
 				}
-				return data;
 			})(),
 			id: 'dataseries'
 		},{
@@ -171,18 +192,37 @@ $(function() {
 		{
 			name : 'Bid',
 			data : (function() {
-			// generate an array of random data
-			var data = [], time = (new Date()).getTime(), i;
+				//Generate old data if forex market is closed
+				if (weekend){
+					//var startDate = new Date(2014, 3, 14, 4, 40, 0, 0);
+					//var endDate = new Date(2014, 3, 14, 5, 0, 0, 0);
 
-			for( i = -999; i <= 0; i++) {
-				data.push([
-					time + i * 1000,
-					//Math.round(Math.random() * 100)
-					EUR
-				]);
-				EUR += Math.floor(Math.random() * 3) - 1;
-			}
-			return data;
+					var biddata = [];
+					$.ajax({
+							type: "GET",
+							dataType: 'json',
+							async: false, //This is bad practice, but a replacement for callbacks in the interim
+							url: "http://ez4x-rates.herokuapp.com/History?symbol=eurusd&from=2014-03-14%2016:40:00&to=2014-03-14%2017:00:00",
+							success: function(data){
+
+								initialArrayLength = data.Rate.length;
+								for (var i = 0; i < data.Rate.length; i++){
+									var bidstring = data.Rate[i].Bid.toString();
+									bidstring = bidstring.substring(0, 1) + bidstring.substring(2, 6);
+									//Check to see if a 0 was left off by the API (leaves off least significant 0's)
+									if (bidstring.length < 5)
+										bidstring = bidstring + "0";
+									var bidint = parseInt(bidstring);
+									var lastdate = new Date(data.Rate[i].Last).getTime();
+									biddata.push([lastdate, bidint]);
+								}
+							}
+					});
+					return biddata;
+
+				}else{
+					return null;
+				}
 			})(),
 			id: 'dataseries2'
 		},
@@ -316,8 +356,8 @@ function sell(quantity){
 
 //Currently only using MACD
 function calcBuySell(MACD_data, MACD_signal){
-	var latestdata = parseInt(MACD_data[999][1]);
-	var latestsignal = parseInt(MACD_signal[999][1]);
+	var latestdata = parseInt(MACD_data[initialArrayLength - 1][1]);
+	var latestsignal = parseInt(MACD_signal[initialArrayLength - 1][1]);
 
 	//Check for buy
 	if (latestdata < 0 && latestsignal < latestdata)
