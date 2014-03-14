@@ -1,5 +1,9 @@
 var MACD_data;
 var MACD_signal; //yes, a global variable, sue me
+var BOL_upperask;
+var BOL_upperbid;
+var BOL_lowerask;
+var BOL_lowerbid;
 
 
 $(function() {
@@ -320,14 +324,6 @@ function calcBuySell(MACD_data, MACD_signal){
 		buy(1000);
 	if (latestsignal > 0 && latestsignal > latestdata)
 		sell(1000);
-
-}
-
-function calcBollinger(){
-
-}
-
-function calcRSI(){
 
 }
 
