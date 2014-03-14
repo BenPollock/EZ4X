@@ -89,9 +89,12 @@
 			return linear(xData, yData, periods);
 		},
 
-		//Added by Ben Pollock to calculate Bollinger Upper
+		//Added by Ben Pollock to calculate Bollinger Upper & Lower
 		bollingerUpper: function(xData, yData, periods){
-			return bollingerUpper(xData, yData, periods);
+			return bollingerUpper(xData, yData, 30);
+		},
+		bollingerLower: function(xData, yData, periods){
+			return bollingerLower(xData, yData, 30);
 		}
 
 	});
@@ -297,6 +300,26 @@
 		}
 
 		return bollingerUpperLine;
+	}
+	//Added by Ben Pollock to calculate Bollinger Lower
+	function bollingerLower (xData, yData, periods){
+		var periodArr = [],
+			bollingerLowerLine = [],
+			length = yData.length;
+
+		var smLine = SMA(xData, yData, periods);
+
+		for (var i = 0; i < length; i ++){
+			periodArr.push(yData[i]);
+			if(periods == periodArr.length){
+				bollingerLowerLine.push([xData[i], smLine[i][1] - STDEV(periodArr)]);
+				periodArr.splice(0,1);
+			}else{
+				bollingerLowerLine.push([xData[i], null]);
+			}
+		}
+
+		return bollingerLowerLine;
 	}
 
 	/* Function based on the idea of an exponential moving average.

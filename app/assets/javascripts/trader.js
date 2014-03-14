@@ -183,48 +183,40 @@ $(function() {
 			id: 'dataseries2'
 		},
 		{
-			name : 'Bollinger Upper',
+			name : 'Bollinger Upper Ask',
 			linkedTo: 'dataseries',
             showInLegend: true,
             type: 'trendline',
             algorithm: 'bollingerUpper',
-			id: 'bollingerupper'
+            dashStyle: 'Dash',
+			id: 'bollingerupperask'
 		},
 		{
-			name : 'Bollinger Mid',
-			data : (function() {
-			// generate an array of random data
-			var data = [], time = (new Date()).getTime(), i;
-
-			for( i = -999; i <= 0; i++) {
-				data.push([
-					time + i * 1000,
-					//Math.round(Math.random() * 100)
-					13793
-				]);
-			}
-			return data;
-			})(),
-			showInLegend: true,
-			id: 'bollingermid'
+			name : 'Bollinger Lower Ask',
+			linkedTo: 'dataseries',
+            showInLegend: true,
+            type: 'trendline',
+            algorithm: 'bollingerLower',
+            dashStyle: 'Dash',
+			id: 'bollingerlowerask'
 		},
 		{
-			name : 'Bollinger Lower',
-			data : (function() {
-			// generate an array of random data
-			var data = [], time = (new Date()).getTime(), i;
-
-			for( i = -999; i <= 0; i++) {
-				data.push([
-					time + i * 1000,
-					//Math.round(Math.random() * 100)
-					13783
-				]);
-			}
-			return data;
-			})(),
-			id: 'bollingerlower',
-			showInLegend: true
+			name : 'Bollinger Upper Bid',
+			linkedTo: 'dataseries2',
+            showInLegend: true,
+            type: 'trendline',
+            algorithm: 'bollingerUpper',
+            dashStyle: 'Dash',
+			id: 'bollingerupperbid'
+		},
+		{
+			name : 'Bollinger Lower Bid',
+			linkedTo: 'dataseries2',
+            showInLegend: true,
+            type: 'trendline',
+            algorithm: 'bollingerLower',
+            dashStyle: 'Dash',
+			id: 'bollingerlowerbid'
 		},
 		{
 			name : 'MACD',
