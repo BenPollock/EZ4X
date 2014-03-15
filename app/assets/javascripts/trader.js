@@ -4,7 +4,7 @@ var BOL_upperask;
 var BOL_upperbid;
 var BOL_lowerask;
 var BOL_lowerbid;
-var weekend = true;
+var weekend = false;
 var initialArrayLength = 0;  //the number of quotes found before the app start time
 
 
@@ -56,6 +56,13 @@ $(function() {
 
 								var bidint = parseInt(bidstring);
 								var askint = parseInt(askstring);
+
+								//because the data will remain static on weekends
+								//we will randomize them for testing purposes
+								if(weekend){
+									bidint += Math.floor(Math.random() * 2);
+									askint += Math.floor(Math.random() * 2);
+								}
 
 								series.addPoint([a, askint], true, true);
 								series2.addPoint([a, bidint], true, true);
@@ -149,37 +156,51 @@ $(function() {
 		series : [{
 			name : 'Ask',
 			data : (function() {
-				//Generate old data if forex market is closed
+
+				//Get a span of 20 minutes of quotes from the API
+				var currentTime = new Date();
+				var twentyminutesago = new Date(currentTime.getTime() - (60000 *20));
+
+				//If market is closed, use closing times instead
 				if (weekend){
-					//var startDate = new Date(2014, 3, 14, 4, 40, 0, 0);
-					//var endDate = new Date(2014, 3, 14, 5, 0, 0, 0);
-
-					var askdata = [];
-					$.ajax({
-							type: "GET",
-							dataType: 'json',
-							async: false, //This is bad practice, but a replacement for callbacks in the interim
-							url: "http://ez4x-rates.herokuapp.com/History?symbol=eurusd&from=2014-03-14%2016:40:00&to=2014-03-14%2017:00:00",
-							success: function(data){
-
-								initialArrayLength = data.Rate.length;
-								for (var i = 0; i < data.Rate.length; i++){
-									var askstring = data.Rate[i].Ask.toString();
-									askstring = askstring.substring(0, 1) + askstring.substring(2, 6);
-									//Check to see if a 0 was left off by the API (leaves off least significant 0's)
-									if (askstring.length < 5)
-										askstring = askstring + "0";
-									var askint = parseInt(askstring);
-									var lastdate = new Date(data.Rate[i].Last).getTime();
-									askdata.push([lastdate, askint]);
-								}
-							}
-					});
-					return askdata;
-
-				}else{
-					return null;
+					var currentTime = new Date(2014, 2, 14, 17, 0, 0, 0);
+					var twentyminutesago = new Date(currentTime.getTime() - (60000 *20));
 				}
+
+				var url = "http://ez4x-rates.herokuapp.com/History?symbol=eurusd&from=" + 
+					twentyminutesago.getFullYear() 
+					+ "-" + (twentyminutesago.getMonth() + 1) 
+					+ "-" + twentyminutesago.getDate()
+					+ "%20" + twentyminutesago.getHours()
+					+ ":" + twentyminutesago.getMinutes()
+					+ ":00&to=" + currentTime.getFullYear() 
+					+ "-" + (currentTime.getMonth() + 1) 
+					+ "-" + currentTime.getDate()
+					+ "%20" + currentTime.getHours()
+					+ ":" + currentTime.getMinutes()
+					+ ":00";
+				var askdata = [];
+				$.ajax({
+						type: "GET",
+						dataType: 'json',
+						async: false, //This is bad practice, but a replacement for callbacks in the interim
+						url: url,
+						success: function(data){
+
+							initialArrayLength = data.Rate.length;
+							for (var i = 0; i < data.Rate.length; i++){
+								var askstring = data.Rate[i].Ask.toString();
+								askstring = askstring.substring(0, 1) + askstring.substring(2, 6);
+								//Check to see if a 0 was left off by the API (leaves off least significant 0's)
+								if (askstring.length < 5)
+									askstring = askstring + "0";
+								var askint = parseInt(askstring);
+								var lastdate = new Date(data.Rate[i].Last).getTime();
+								askdata.push([lastdate, askint]);
+							}
+						}
+				});
+				return askdata;
 			})(),
 			id: 'dataseries'
 		},{
@@ -192,37 +213,49 @@ $(function() {
 		{
 			name : 'Bid',
 			data : (function() {
-				//Generate old data if forex market is closed
+
+				//Get a span of 20 minutes of quotes from the API
+				var currentTime = new Date();
+				var twentyminutesago = new Date(currentTime.getTime() - (60000 *20));
+
+				//If market is closed, use closing times instead
 				if (weekend){
-					//var startDate = new Date(2014, 3, 14, 4, 40, 0, 0);
-					//var endDate = new Date(2014, 3, 14, 5, 0, 0, 0);
-
-					var biddata = [];
-					$.ajax({
-							type: "GET",
-							dataType: 'json',
-							async: false, //This is bad practice, but a replacement for callbacks in the interim
-							url: "http://ez4x-rates.herokuapp.com/History?symbol=eurusd&from=2014-03-14%2016:40:00&to=2014-03-14%2017:00:00",
-							success: function(data){
-
-								initialArrayLength = data.Rate.length;
-								for (var i = 0; i < data.Rate.length; i++){
-									var bidstring = data.Rate[i].Bid.toString();
-									bidstring = bidstring.substring(0, 1) + bidstring.substring(2, 6);
-									//Check to see if a 0 was left off by the API (leaves off least significant 0's)
-									if (bidstring.length < 5)
-										bidstring = bidstring + "0";
-									var bidint = parseInt(bidstring);
-									var lastdate = new Date(data.Rate[i].Last).getTime();
-									biddata.push([lastdate, bidint]);
-								}
-							}
-					});
-					return biddata;
-
-				}else{
-					return null;
+					var currentTime = new Date(2014, 2, 14, 17, 0, 0, 0);
+					var twentyminutesago = new Date(currentTime.getTime() - (60000 *20));
 				}
+
+				var url = "http://ez4x-rates.herokuapp.com/History?symbol=eurusd&from=" + 
+					twentyminutesago.getFullYear() 
+					+ "-" + (twentyminutesago.getMonth() + 1) 
+					+ "-" + twentyminutesago.getDate()
+					+ "%20" + twentyminutesago.getHours()
+					+ ":" + twentyminutesago.getMinutes()
+					+ ":00&to=" + currentTime.getFullYear() 
+					+ "-" + (currentTime.getMonth() + 1) 
+					+ "-" + currentTime.getDate()
+					+ "%20" + currentTime.getHours()
+					+ ":" + currentTime.getMinutes()
+					+ ":00";
+				var biddata = [];
+				$.ajax({
+						type: "GET",
+						dataType: 'json',
+						async: false, //This is bad practice, but a replacement for callbacks in the interim
+						url: url,
+						success: function(data){
+							for (var i = 0; i < data.Rate.length; i++){
+								var bidstring = data.Rate[i].Bid.toString();
+								bidstring = bidstring.substring(0, 1) + bidstring.substring(2, 6);
+								//Check to see if a 0 was left off by the API (leaves off least significant 0's)
+								if (bidstring.length < 5)
+									bidstring = bidstring + "0";
+								var bidint = parseInt(bidstring);
+								var lastdate = new Date(data.Rate[i].Last).getTime();
+								biddata.push([lastdate, bidint]);
+							}
+						}
+				});
+				return biddata;
 			})(),
 			id: 'dataseries2'
 		},
@@ -287,7 +320,7 @@ $(function() {
         },
         {
         	name : 'RSI',
-			data : (function() {
+			/*data : (function() {
 			// generate an array of random data
 			var data = [], time = (new Date()).getTime(), i;
 
@@ -299,7 +332,7 @@ $(function() {
 				]);
 			}
 			return data;
-			})(),
+			})(),*/
 			yAxis: 2,
 			id: 'rsi',
 			showInLegend: true
@@ -356,14 +389,16 @@ function sell(quantity){
 
 //Currently only using MACD
 function calcBuySell(MACD_data, MACD_signal){
-	var latestdata = parseInt(MACD_data[initialArrayLength - 1][1]);
-	var latestsignal = parseInt(MACD_signal[initialArrayLength - 1][1]);
+	if(initialArrayLength > 0){ //only auto trade if market is open
+		var latestdata = parseInt(MACD_data[initialArrayLength - 1][1]);
+		var latestsignal = parseInt(MACD_signal[initialArrayLength - 1][1]);
 
-	//Check for buy
-	if (latestdata < 0 && latestsignal < latestdata)
-		buy(1000);
-	if (latestsignal > 0 && latestsignal > latestdata)
-		sell(1000);
+		//Check for buy
+		if (latestdata < 0 && latestsignal < latestdata)
+			buy(1000);
+		if (latestsignal > 0 && latestsignal > latestdata)
+			sell(1000);
+	}
 
 }
 
