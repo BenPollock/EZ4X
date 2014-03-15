@@ -4,7 +4,7 @@ var BOL_upperask;
 var BOL_upperbid;
 var BOL_lowerask;
 var BOL_lowerbid;
-var weekend = false;
+var weekend = true;
 var initialArrayLength = 0;  //the number of quotes found before the app start time
 
 
@@ -202,7 +202,8 @@ $(function() {
 				});
 				return askdata;
 			})(),
-			id: 'dataseries'
+			id: 'dataseries',
+			color: '#CD8500'
 		},{
 			type: 'flags',
 			data: [],
@@ -257,7 +258,8 @@ $(function() {
 				});
 				return biddata;
 			})(),
-			id: 'dataseries2'
+			id: 'dataseries2',
+			color: '#008080'
 		},
 		{
 			name : 'Bollinger Upper Ask',
@@ -266,7 +268,8 @@ $(function() {
             type: 'trendline',
             algorithm: 'bollingerUpper',
             dashStyle: 'Dash',
-			id: 'bollingerupperask'
+			id: 'bollingerupperask',
+			color: '#CD8500'
 		},
 		{
 			name : 'Bollinger Lower Ask',
@@ -274,8 +277,9 @@ $(function() {
             showInLegend: true,
             type: 'trendline',
             algorithm: 'bollingerLower',
-            dashStyle: 'Dash',
-			id: 'bollingerlowerask'
+            dashStyle: 'LongDash',
+			id: 'bollingerlowerask',
+			color: '#CD8500'
 		},
 		{
 			name : 'Bollinger Upper Bid',
@@ -284,7 +288,8 @@ $(function() {
             type: 'trendline',
             algorithm: 'bollingerUpper',
             dashStyle: 'Dash',
-			id: 'bollingerupperbid'
+			id: 'bollingerupperbid',
+			color: '#008080'
 		},
 		{
 			name : 'Bollinger Lower Bid',
@@ -292,8 +297,9 @@ $(function() {
             showInLegend: true,
             type: 'trendline',
             algorithm: 'bollingerLower',
-            dashStyle: 'Dash',
-			id: 'bollingerlowerbid'
+            dashStyle: 'LongDash',
+			id: 'bollingerlowerbid',
+			color: '#008080'
 		},
 		{
 			name : 'MACD',
