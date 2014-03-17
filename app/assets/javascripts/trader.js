@@ -162,15 +162,6 @@ $(function() {
                 height: 50,
                 offset: 0,
                 lineWidth: 2
-            },
-            {
-            	title: {
-            		text: 'RSI'
-            	},
-            	top: 350,
-            	height: 50,
-            	offset: 0,
-            	lineWidth: 2
             }],
 		
 		series : [{
