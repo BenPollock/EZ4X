@@ -1,13 +1,22 @@
+//Variables for the graph data
 var MACD_data;
-var MACD_signal; //yes, a global variable, sue me
+var MACD_signal;
 var BOL_upperask;
 var BOL_upperbid;
 var BOL_lowerask;
 var BOL_lowerbid;
+//Variables for API hacks
 var weekend = false;
-var dateFix = false;  //used it hack the API bug
+var dateFix = false;
+
 var initialArrayLength = 0;  //the number of quotes found before the app start time
+//Variables for tenchical indicators on/off
 var macd_auto = true;
+//Variables for technical indicators 
+var bollinger_period = 20;
+var macd_short_period = 12;
+var macd_long_period = 26;
+var macd_signal_period = 9;
 
 
 $(function() {

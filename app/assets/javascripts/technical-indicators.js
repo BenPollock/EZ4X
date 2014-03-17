@@ -91,10 +91,10 @@
 
 		//Added by Ben Pollock to calculate Bollinger Upper & Lower
 		bollingerUpper: function(xData, yData, periods){
-			return bollingerUpper(xData, yData, 5);
+			return bollingerUpper(xData, yData, bollinger_period);
 		},
 		bollingerLower: function(xData, yData, periods){
-			return bollingerLower(xData, yData, 30);
+			return bollingerLower(xData, yData, bollinger_period);
 		}
 
 	});
@@ -158,9 +158,9 @@
 	function calcMACD (xData, yData, periods) {
 
 		var chart = this,
-			shortPeriod = 12,
-			longPeriod = 26,
-			signalPeriod = 9,
+			shortPeriod = macd_short_period,
+			longPeriod = macd_long_period,
+			signalPeriod = macd_signal_period,
 			shortEMA,
 			longEMA,
 			MACD = [], 
