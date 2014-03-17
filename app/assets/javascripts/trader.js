@@ -82,6 +82,11 @@ $(function() {
 									askint += Math.floor(Math.random() * 3);
 								}
 
+								macd_short_period = parseInt($("#macdshort").val())
+								macd_long_period = parseInt($("#macdlong").val());
+								macd_signal_period = parseInt($("#macdsoginal").val());
+								bollinger_period = parseInt($("#bollinger").val());
+
 								series.addPoint([a, askint], true, true);
 								series2.addPoint([a, bidint], true, true);
 
