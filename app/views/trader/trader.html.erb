@@ -32,7 +32,7 @@
 			<h4>Positions:</h4>
 			<p id="cashdisplay">Cash: </p>
 			<p id="positiondisplay">Positions: </p>
-			<p>Earnings: </p>
+			<p id="borroweddisplay">Borrowed: </p>
 			<br>Manual Controls
 			<div class="form-group">
 				<input type="number" class="form-control" id="buyamount" placeholder = "Number of Units"><br>
@@ -68,11 +68,12 @@
 				<div class="form-group">
 					<label class="col-lg-6 control-label" for="leverage">Leverage</label>
 					<div class="col-lg-6">
-						<select class="form-control" id="leverage" disabled>
+						<select class="form-control" id="leverage">
 							<option value="1">1:1</option>
-							<option value="2">50:1</option>
-							<option value="3" selected>100:1</option>
-							<option value="4">200:1</option>
+							<option value="25">25:1</option>
+							<option value="50" selected>50:1</option>
+							<option value="100">100:1</option>
+							<option value="200">200:1</option>
 						</select>
 					</div>
 				</div>

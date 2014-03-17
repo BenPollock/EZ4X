@@ -4,7 +4,8 @@ var BOL_upperask;
 var BOL_upperbid;
 var BOL_lowerask;
 var BOL_lowerbid;
-var weekend = true;
+var weekend = false;
+var dateFix = false;  //used it hack the API bug
 var initialArrayLength = 0;  //the number of quotes found before the app start time
 
 
@@ -30,7 +31,14 @@ $(function() {
 					var up_in_a_row = 0;
 					//This updates the chart
 					setInterval(function() {
-						var a = (new Date()).getTime(); // current time
+						var a;
+						if(dateFix){
+							var tempdate = new Date();
+							tempdate.setDate(tempdate.getDate() + 1);
+							a = tempdate.getTime();
+						}else{
+							a = (new Date()).getTime(); // current time
+						}
 
 						var change = Math.floor(Math.random() * 3) - 1;
 						y = EUR + change;
@@ -60,8 +68,8 @@ $(function() {
 								//because the data will remain static on weekends
 								//we will randomize them for testing purposes
 								if(weekend){
-									bidint += Math.floor(Math.random() * 2);
-									askint += Math.floor(Math.random() * 2);
+									bidint += Math.floor(Math.random() * 3);
+									askint += Math.floor(Math.random() * 3);
 								}
 
 								series.addPoint([a, askint], true, true);
@@ -74,7 +82,8 @@ $(function() {
 						//series.addPoint([a, y], true, true);
 						//series2.addPoint([a, y-2], true, true);
 
-						calcBuySell (MACD_data, MACD_signal);
+						//Temporarily turning off buy/sell auto
+						//calcBuySell (MACD_data, MACD_signal);
 
 
 
@@ -167,18 +176,51 @@ $(function() {
 					var twentyminutesago = new Date(currentTime.getTime() - (60000 *20));
 				}
 
-				var url = "http://ez4x-rates.herokuapp.com/History?symbol=eurusd&from=" + 
-					twentyminutesago.getFullYear() 
-					+ "-" + (twentyminutesago.getMonth() + 1) 
-					+ "-" + twentyminutesago.getDate()
-					+ "%20" + twentyminutesago.getHours()
-					+ ":" + twentyminutesago.getMinutes()
-					+ ":00&to=" + currentTime.getFullYear() 
-					+ "-" + (currentTime.getMonth() + 1) 
-					+ "-" + currentTime.getDate()
-					+ "%20" + currentTime.getHours()
-					+ ":" + currentTime.getMinutes()
-					+ ":00";
+				var url;
+
+				//There is a bug time bug in the API, this is a quick fix around it
+				if(currentTime < 20){
+					url = "http://ez4x-rates.herokuapp.com/History?symbol=eurusd&from=" + 
+						twentyminutesago.getFullYear() 
+						+ "-" + (twentyminutesago.getMonth() + 1) 
+						+ "-" + twentyminutesago.getDate()
+						+ "%20" + twentyminutesago.getHours()
+						+ ":" + twentyminutesago.getMinutes()
+						+ ":00&to=" + currentTime.getFullYear() 
+						+ "-" + (currentTime.getMonth() + 1) 
+						+ "-" + currentTime.getDate()
+						+ "%20" + currentTime.getHours()
+						+ ":" + currentTime.getMinutes()
+						+ ":00";
+				}else if(twentyminutesago >= 20){
+					dateFix = true;
+					url = "http://ez4x-rates.herokuapp.com/History?symbol=eurusd&from=" + 
+						twentyminutesago.getFullYear() 
+						+ "-" + (twentyminutesago.getMonth() + 1) 
+						+ "-" + (twentyminutesago.getDate() + 1)
+						+ "%20" + twentyminutesago.getHours()
+						+ ":" + twentyminutesago.getMinutes()
+						+ ":00&to=" + currentTime.getFullYear() 
+						+ "-" + (currentTime.getMonth() + 1) 
+						+ "-" + (currentTime.getDate() + 1)
+						+ "%20" + currentTime.getHours()
+						+ ":" + currentTime.getMinutes()
+						+ ":00";
+				}else{
+					dateFix = true;
+					url = "http://ez4x-rates.herokuapp.com/History?symbol=eurusd&from=" + 
+						twentyminutesago.getFullYear() 
+						+ "-" + twentyminutesago.getMonth()
+						+ "-" + twentyminutesago.getDate()
+						+ "%20" + twentyminutesago.getHours()
+						+ ":" + twentyminutesago.getMinutes()
+						+ ":00&to=" + currentTime.getFullYear() 
+						+ "-" + (currentTime.getMonth() + 1) 
+						+ "-" + currentTime.getDate()
+						+ "%20" + currentTime.getHours()
+						+ ":" + currentTime.getMinutes()
+						+ ":00";
+				}
 				var askdata = [];
 				$.ajax({
 						type: "GET",
@@ -225,18 +267,49 @@ $(function() {
 					var twentyminutesago = new Date(currentTime.getTime() - (60000 *20));
 				}
 
-				var url = "http://ez4x-rates.herokuapp.com/History?symbol=eurusd&from=" + 
-					twentyminutesago.getFullYear() 
-					+ "-" + (twentyminutesago.getMonth() + 1) 
-					+ "-" + twentyminutesago.getDate()
-					+ "%20" + twentyminutesago.getHours()
-					+ ":" + twentyminutesago.getMinutes()
-					+ ":00&to=" + currentTime.getFullYear() 
-					+ "-" + (currentTime.getMonth() + 1) 
-					+ "-" + currentTime.getDate()
-					+ "%20" + currentTime.getHours()
-					+ ":" + currentTime.getMinutes()
-					+ ":00";
+				var url;
+
+				//There is a bug time bug in the API, this is a quick fix around it
+				if(currentTime < 20){
+					url = "http://ez4x-rates.herokuapp.com/History?symbol=eurusd&from=" + 
+						twentyminutesago.getFullYear() 
+						+ "-" + (twentyminutesago.getMonth() + 1) 
+						+ "-" + twentyminutesago.getDate()
+						+ "%20" + twentyminutesago.getHours()
+						+ ":" + twentyminutesago.getMinutes()
+						+ ":00&to=" + currentTime.getFullYear() 
+						+ "-" + (currentTime.getMonth() + 1) 
+						+ "-" + currentTime.getDate()
+						+ "%20" + currentTime.getHours()
+						+ ":" + currentTime.getMinutes()
+						+ ":00";
+				}else if(twentyminutesago >= 20){
+					url = "http://ez4x-rates.herokuapp.com/History?symbol=eurusd&from=" + 
+						twentyminutesago.getFullYear() 
+						+ "-" + (twentyminutesago.getMonth() + 1) 
+						+ "-" + (twentyminutesago.getDate() + 1)
+						+ "%20" + twentyminutesago.getHours()
+						+ ":" + twentyminutesago.getMinutes()
+						+ ":00&to=" + currentTime.getFullYear() 
+						+ "-" + (currentTime.getMonth() + 1) 
+						+ "-" + (currentTime.getDate() + 1)
+						+ "%20" + currentTime.getHours()
+						+ ":" + currentTime.getMinutes()
+						+ ":00";
+				}else{
+					url = "http://ez4x-rates.herokuapp.com/History?symbol=eurusd&from=" + 
+						twentyminutesago.getFullYear() 
+						+ "-" + twentyminutesago.getMonth()
+						+ "-" + twentyminutesago.getDate()
+						+ "%20" + twentyminutesago.getHours()
+						+ ":" + twentyminutesago.getMinutes()
+						+ ":00&to=" + currentTime.getFullYear() 
+						+ "-" + (currentTime.getMonth() + 1) 
+						+ "-" + currentTime.getDate()
+						+ "%20" + currentTime.getHours()
+						+ ":" + currentTime.getMinutes()
+						+ ":00";
+				}
 				var biddata = [];
 				$.ajax({
 						type: "GET",
@@ -370,7 +443,7 @@ function buy(quantity){
 			var dataratedecimal = data.rate.toString();
 			dataratedecimal = dataratedecimal.substring(0, dataratedecimal.length-4) + "." + dataratedecimal.substring(dataratedecimal.length-4, dataratedecimal.length);
 			$("#tradealert").html("Manual Trade Executed: Buy " + quantity + " EUR @ " + dataratedecimal + "USD");
-			updateDisplay(data.cash, data.position);
+			updateDisplay(data.cash, data.position, data.borrowed);
 		}
 	});
 
@@ -388,7 +461,7 @@ function sell(quantity){
 			var dataratedecimal = data.rate.toString();
 			dataratedecimal = dataratedecimal.substring(0, dataratedecimal.length-4) + "." + dataratedecimal.substring(dataratedecimal.length-4, dataratedecimal.length);
 			$("#tradealert").html("Manual Trade Executed: Sell " + quantity + " EUR @ " + dataratedecimal + "USD");
-			updateDisplay(data.cash, data.position);
+			updateDisplay(data.cash, data.position, data.borrowed);
 		}
 	});
 }
@@ -416,14 +489,15 @@ function calcBuySell(MACD_data, MACD_signal){
 //This will create a new session on button click
 function initSession(){
 	var cash = $("#money").val();
+	var leverage = $("#leverage").val();
 
 	//create the session
 	$.ajax({
 		type: "POST",
 		url: "tsessions/create",
-		data: {cash: cash},
+		data: {cash: cash, leverage: leverage},
 		success: function(cash){
-				updateDisplay(cash, "0");
+				updateDisplay(cash, "0", "0");
 		}
 	});
 
@@ -438,7 +512,7 @@ function reloadSession(){
 		url: "tsessions/latest",
 		success: function(data){
 			if(!(data.empty == "empty"))
-				updateDisplay(data.cash, data.position);
+				updateDisplay(data.cash, data.position, data.borrowed);
 			else
 				alert("You have no session!");
 		}
@@ -446,9 +520,12 @@ function reloadSession(){
 
 }
 
-function updateDisplay(cash, position){
+function updateDisplay(cash, position, borrowed){
 	var decimalcash = cash.toString();
-	var decimalcash = decimalcash.substring(0, decimalcash.length-4) + "." + decimalcash.substring(decimalcash.length-4, decimalcash.length)
+	decimalcash = decimalcash.substring(0, decimalcash.length-4) + "." + decimalcash.substring(decimalcash.length-4, decimalcash.length);
 	$("#cashdisplay").html("Cash: $" + decimalcash);
 	$("#positiondisplay").html("Positions: " + position + "EUR");
+	var decimalborrowed = borrowed.toString();
+	decimalborrowed = decimalborrowed.substring(0, decimalborrowed.length-4) + "." + decimalborrowed.substring(decimalborrowed.length-4, decimalborrowed.length);
+	$("#borroweddisplay").html("Borrowed: $" + decimalborrowed);
 }
