@@ -36,7 +36,7 @@
 
 			var xData = this.linkedParent.xData,
 				yData = this.linkedParent.yData,
-				periods = this.options.periods || 5,		// Set this to what default? should be defaults for each algorithm.
+				periods = this.options.periods || 1,		// Set this to what default? should be defaults for each algorithm.
 				algorithm = this.options.algorithm || 'linear';
 
 			return this[algorithm](xData, yData, periods);
@@ -91,7 +91,7 @@
 
 		//Added by Ben Pollock to calculate Bollinger Upper & Lower
 		bollingerUpper: function(xData, yData, periods){
-			return bollingerUpper(xData, yData, 30);
+			return bollingerUpper(xData, yData, 5);
 		},
 		bollingerLower: function(xData, yData, periods){
 			return bollingerLower(xData, yData, 30);

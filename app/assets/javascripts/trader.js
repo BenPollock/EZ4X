@@ -7,6 +7,7 @@ var BOL_lowerbid;
 var weekend = false;
 var dateFix = false;  //used it hack the API bug
 var initialArrayLength = 0;  //the number of quotes found before the app start time
+var macd_auto = true;
 
 
 $(function() {
@@ -79,11 +80,7 @@ $(function() {
 							}
 						});
 
-						//series.addPoint([a, y], true, true);
-						//series2.addPoint([a, y-2], true, true);
-
-						//Temporarily turning off buy/sell auto
-						//calcBuySell (MACD_data, MACD_signal);
+						calcBuySell (MACD_data, MACD_signal);
 
 
 
@@ -179,7 +176,7 @@ $(function() {
 				var url;
 
 				//There is a bug time bug in the API, this is a quick fix around it
-				if(currentTime < 20){
+				if(currentTime.getHours() < 20){
 					url = "http://ez4x-rates.herokuapp.com/History?symbol=eurusd&from=" + 
 						twentyminutesago.getFullYear() 
 						+ "-" + (twentyminutesago.getMonth() + 1) 
@@ -192,7 +189,7 @@ $(function() {
 						+ "%20" + currentTime.getHours()
 						+ ":" + currentTime.getMinutes()
 						+ ":00";
-				}else if(twentyminutesago >= 20){
+				}else if(twentyminutesago.getHours() >= 20){
 					dateFix = true;
 					url = "http://ez4x-rates.herokuapp.com/History?symbol=eurusd&from=" + 
 						twentyminutesago.getFullYear() 
@@ -270,7 +267,7 @@ $(function() {
 				var url;
 
 				//There is a bug time bug in the API, this is a quick fix around it
-				if(currentTime < 20){
+				if(currentTime.getHours() < 20){
 					url = "http://ez4x-rates.herokuapp.com/History?symbol=eurusd&from=" + 
 						twentyminutesago.getFullYear() 
 						+ "-" + (twentyminutesago.getMonth() + 1) 
@@ -283,7 +280,7 @@ $(function() {
 						+ "%20" + currentTime.getHours()
 						+ ":" + currentTime.getMinutes()
 						+ ":00";
-				}else if(twentyminutesago >= 20){
+				}else if(twentyminutesago.getHours() >= 20){
 					url = "http://ez4x-rates.herokuapp.com/History?symbol=eurusd&from=" + 
 						twentyminutesago.getFullYear() 
 						+ "-" + (twentyminutesago.getMonth() + 1) 
@@ -417,7 +414,9 @@ $(function() {
 			showInLegend: true
         }]
 	});
+
 	$('.slider').slider();
+	$('#MACDswitch').bootstrapSwitch();
 
 	//Manual buy/sell controls
 	$("#manualbuy").on("click", function(){
@@ -430,6 +429,14 @@ $(function() {
 	});
 
 	reloadSession();
+	//Technical Indicator Event Handlers
+	$('#MACDswitch').on('click', function () {
+		if($('#MACDswitch').bootstrapSwitch('state'))
+			macd_auto = true;
+		else
+			macd_auto = false;
+	});
+
 });
 
 
@@ -472,19 +479,16 @@ function calcBuySell(MACD_data, MACD_signal){
 		var latestdata = parseInt(MACD_data[initialArrayLength - 1][1]);
 		var latestsignal = parseInt(MACD_signal[initialArrayLength - 1][1]);
 
-		//Check for buy
-		if (latestdata < 0 && latestsignal < latestdata)
-			buy(1000);
-		if (latestsignal > 0 && latestsignal > latestdata)
-			sell(1000);
+		//Check for buy using macd
+		if(macd_auto){
+			if (latestdata < 0 && latestsignal < latestdata)
+				buy(1000);
+			if (latestsignal > 0 && latestsignal > latestdata)
+				sell(1000);
+		}
 	}
 
 }
-
-//Handled by technical indicators js
-/*function calcMACD(){
-
-}*/
 
 //This will create a new session on button click
 function initSession(){
