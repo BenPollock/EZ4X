@@ -6,6 +6,7 @@ class TsessionsController < ApplicationController
 		@tsession.user_id = current_user.id
 		begin
 			@tsession.cash = params[:cash].to_i * 10000
+			@tsession.starting_money = params[:cash].to_i * 10000
 			@tsession.leverage = params[:leverage].to_i
 		rescue
 			render status: 500
