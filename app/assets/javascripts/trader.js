@@ -212,7 +212,7 @@ $(function() {
 					dateFix = true;
 					url = "http://ez4x-rates.herokuapp.com/History?symbol=eurusd&from=" + 
 						twentyminutesago.getFullYear() 
-						+ "-" + twentyminutesago.getMonth()
+						+ "-" + (twentyminutesago.getMonth() + 1)
 						+ "-" + twentyminutesago.getDate()
 						+ "%20" + twentyminutesago.getHours()
 						+ ":" + twentyminutesago.getMinutes()
@@ -301,7 +301,7 @@ $(function() {
 				}else{
 					url = "http://ez4x-rates.herokuapp.com/History?symbol=eurusd&from=" + 
 						twentyminutesago.getFullYear() 
-						+ "-" + twentyminutesago.getMonth()
+						+ "-" + (twentyminutesago.getMonth() +1)
 						+ "-" + twentyminutesago.getDate()
 						+ "%20" + twentyminutesago.getHours()
 						+ ":" + twentyminutesago.getMinutes()
