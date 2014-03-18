@@ -12,6 +12,7 @@ var dateFix = false;
 var initialArrayLength = 0;  //the number of quotes found before the app start time
 //Variables for tenchical indicators on/off
 var macd_auto = true;
+var bollinger_auto = true;
 //Variables for technical indicators 
 var bollinger_period = 20;
 var macd_short_period = 12;
@@ -93,6 +94,17 @@ $(function() {
 
 							}
 						});
+
+						if($('#MACDswitch').bootstrapSwitch('state'))
+							macd_auto = true;
+						else
+							macd_auto = false;
+
+						if($('#bollingerswitch').bootstrapSwitch('state'))
+							bollinger_auto = true;
+						else
+							bollinger_auto = false;
+
 
 						calcBuySell (MACD_data, MACD_signal);
 
@@ -403,6 +415,7 @@ $(function() {
 
 	$('.slider').slider();
 	$('#MACDswitch').bootstrapSwitch();
+	$('#bollingerswitch').bootstrapSwitch();
 
 	//Manual buy/sell controls
 	$("#manualbuy").on("click", function(){
@@ -416,12 +429,19 @@ $(function() {
 
 	reloadSession();
 	//Technical Indicator Event Handlers
-	$('#MACDswitch').on('click', function () {
+	/*$('#MACDswitch').on('click', function () {
 		if($('#MACDswitch').bootstrapSwitch('state'))
 			macd_auto = true;
 		else
 			macd_auto = false;
 	});
+	$('#bollingerswitch').on('click', function () {
+		if($('#bollingerswitch').bootstrapSwitch('state'))
+			bollinger_auto = true;
+		else
+			bollinger_auto = false;
+	});
+*/
 
 });
 
