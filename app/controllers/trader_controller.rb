@@ -24,7 +24,6 @@ class TraderController < ApplicationController
 		#Get the most recent session under the user
 		tsessionid = Tsession.where("user_id = ?", current_user.id).order("created_at DESC").first.id
 		@trade.tsession_id = tsessionid
-		@trade.save
 
 		
 		#Get current session, add new position or increase existing position, decrease money available
@@ -62,7 +61,16 @@ class TraderController < ApplicationController
 			#@tsession.cash = @tsession.cash.to_i - (quantity.to_i * @bidrate).to_i
 			@rate = @bidrate
 		end
-		#@tsession.save
+		
+		#Determine if the user has enough cash to make the trade
+		if quantity.to_i >= 0
+			if @tsession.cash < ((quantity.to_i * @rate)/@tsession.leverage).to_i
+				render status: 500
+			end
+		end
+
+
+		@trade.save
 
 
 		#Buy/Sell Logic:
