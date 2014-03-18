@@ -9,6 +9,7 @@ var BOL_lowerbid;
 var weekend = false;
 var dateFix = false;
 
+var risk = 5; //the risk slider
 var initialArrayLength = 0;  //the number of quotes found before the app start time
 //Variables for tenchical indicators on/off
 var macd_auto = true;
@@ -104,6 +105,8 @@ $(function() {
 							bollinger_auto = true;
 						else
 							bollinger_auto = false;
+
+						risk = parseInt($("#risk").val());
 
 
 						calcBuySell (MACD_data, MACD_signal);
@@ -428,20 +431,6 @@ $(function() {
 	});
 
 	reloadSession();
-	//Technical Indicator Event Handlers
-	/*$('#MACDswitch').on('click', function () {
-		if($('#MACDswitch').bootstrapSwitch('state'))
-			macd_auto = true;
-		else
-			macd_auto = false;
-	});
-	$('#bollingerswitch').on('click', function () {
-		if($('#bollingerswitch').bootstrapSwitch('state'))
-			bollinger_auto = true;
-		else
-			bollinger_auto = false;
-	});
-*/
 
 });
 
@@ -482,15 +471,15 @@ function sell(quantity){
 //Currently only using MACD
 function calcBuySell(MACD_data, MACD_signal){
 	if(initialArrayLength > 0){ //only auto trade if market is open
-		var latestdata = parseInt(MACD_data[initialArrayLength - 1][1]);
-		var latestsignal = parseInt(MACD_signal[initialArrayLength - 1][1]);
+		var latestdata = parseInt(MACD_data[initialArrayLength - 1][1] * 100);
+		var latestsignal = parseInt(MACD_signal[initialArrayLength - 1][1] * 100);
 
 		//Check for buy using macd
 		if(macd_auto){
 			if (latestdata < 0 && latestsignal < latestdata)
-				buy(1000);
+				buy(10000 * risk);
 			if (latestsignal > 0 && latestsignal > latestdata)
-				sell(1000);
+				sell(1000 * risk);
 		}
 	}
 
