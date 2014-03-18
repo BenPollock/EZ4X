@@ -56,10 +56,14 @@ $(function() {
 						y = EUR + change;
 						EUR = y;
 
+						var askint = 0;
+						var bidint = 0;
+
 						$.ajax({
 							type: "GET",
 							dataType: 'json',
 							url: "http://ez4x-rates.herokuapp.com/Convert?symbol=EURUSD",
+							async: false,
 							success: function(data){
 								var bidstring = data.Bid.toString();
 								var askstring = data.Ask.toString();
@@ -74,8 +78,8 @@ $(function() {
 								if (askstring.length < 5)
 									askstring = askstring + "0";
 
-								var bidint = parseInt(bidstring);
-								var askint = parseInt(askstring);
+								bidint = parseInt(bidstring);
+								askint = parseInt(askstring);
 
 								//because the data will remain static on weekends
 								//we will randomize them for testing purposes
@@ -109,7 +113,7 @@ $(function() {
 						risk = parseInt($("#risk").val());
 
 
-						calcBuySell (MACD_data, MACD_signal);
+						calcBuySell (MACD_data, MACD_signal, BOL_upperask, BOL_upperbid, BOL_lowerask, BOL_lowerbid, askint, bidint);
 
 
 
@@ -174,7 +178,7 @@ $(function() {
                     text: 'MACD'
                 },
                 top: 300,
-                height: 50,
+                height: 90,
                 offset: 0,
                 lineWidth: 2
             }],
@@ -423,11 +427,11 @@ $(function() {
 	//Manual buy/sell controls
 	$("#manualbuy").on("click", function(){
 		var quantity = $("#buyamount").val();
-		buy(quantity);
+		buy(quantity, "Manual");
 	});
 	$("#manualsell").on("click", function(){
 		var quantity = $("#buyamount").val();
-		sell(quantity);
+		sell(quantity, "Manual");
 	});
 
 	reloadSession();
@@ -435,7 +439,7 @@ $(function() {
 });
 
 
-function buy(quantity){
+function buy(quantity, trigger){
 	//initiate the trade to the backend
 	$.ajax({
 		type: "POST",
@@ -444,14 +448,14 @@ function buy(quantity){
 		success: function(data){
 			var dataratedecimal = data.rate.toString();
 			dataratedecimal = dataratedecimal.substring(0, dataratedecimal.length-4) + "." + dataratedecimal.substring(dataratedecimal.length-4, dataratedecimal.length);
-			$("#tradealert").html("Manual Trade Executed: Buy " + quantity + " EUR @ " + dataratedecimal + "USD");
+			$("#tradealert").html(trigger + " Trade Executed: Buy " + quantity + " EUR @ " + dataratedecimal + "USD");
 			updateDisplay(data.cash, data.position, data.borrowed);
 		}
 	});
 
 }
 
-function sell(quantity){
+function sell(quantity, trigger){
 	//initiate the trade to the backend
 	var quantitynegative = parseInt(quantity);
 	quantitynegative = quantitynegative * -1;
@@ -462,24 +466,36 @@ function sell(quantity){
 		success: function(data){
 			var dataratedecimal = data.rate.toString();
 			dataratedecimal = dataratedecimal.substring(0, dataratedecimal.length-4) + "." + dataratedecimal.substring(dataratedecimal.length-4, dataratedecimal.length);
-			$("#tradealert").html("Manual Trade Executed: Sell " + quantity + " EUR @ " + dataratedecimal + "USD");
+			$("#tradealert").html(trigger + " Trade Executed: Sell " + quantity + " EUR @ " + dataratedecimal + "USD");
 			updateDisplay(data.cash, data.position, data.borrowed);
 		}
 	});
 }
 
 //Currently only using MACD
-function calcBuySell(MACD_data, MACD_signal){
+function calcBuySell(MACD_data, MACD_signal, BOL_upperask, BOL_upperbid, BOL_lowerask, BOL_lowerbid, askint, bidint){
 	if(initialArrayLength > 0){ //only auto trade if market is open
 		var latestdata = parseInt(MACD_data[initialArrayLength - 1][1] * 100);
 		var latestsignal = parseInt(MACD_signal[initialArrayLength - 1][1] * 100);
+		var latestBOL_lowerask = parseInt(BOL_lowerask[initialArrayLength - 1][1]);
+		var latestBOL_upperbid = parseInt(BOL_upperbid[initialArrayLength - 1][1]);
+
+
+
 
 		//Check for buy using macd
 		if(macd_auto){
 			if (latestdata < 0 && latestsignal < latestdata)
-				buy(10000 * risk);
+				buy(10000 * risk, "MACD");
 			if (latestsignal > 0 && latestsignal > latestdata)
-				sell(1000 * risk);
+				sell(10000 * risk, "MACD");
+		}
+
+		if(bollinger_auto){
+			if(latestBOL_lowerask > askint)
+				buy(10000 * risk, "Bollinger");	
+			else if(latestBOL_upperbid < bidint)
+				sell(10000 * risk, "Bollinger");
 		}
 	}
 
