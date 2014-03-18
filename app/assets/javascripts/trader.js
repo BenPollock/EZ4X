@@ -152,7 +152,7 @@ $(function() {
 		},
 		
 		title : {
-			text : 'EUR/USD REAL!! Data'
+			text : 'EUR/USD'
 		},
 		
 		exporting: {
@@ -356,7 +356,7 @@ $(function() {
 			linkedTo: 'dataseries',
             showInLegend: true,
             type: 'trendline',
-            algorithm: 'bollingerUpper',
+            algorithm: 'bollingerUpperAsk',
             dashStyle: 'Dash',
 			id: 'bollingerupperask',
 			color: '#CD8500'
@@ -366,7 +366,7 @@ $(function() {
 			linkedTo: 'dataseries',
             showInLegend: true,
             type: 'trendline',
-            algorithm: 'bollingerLower',
+            algorithm: 'bollingerLowerAsk',
             dashStyle: 'LongDash',
 			id: 'bollingerlowerask',
 			color: '#CD8500'
@@ -376,7 +376,7 @@ $(function() {
 			linkedTo: 'dataseries2',
             showInLegend: true,
             type: 'trendline',
-            algorithm: 'bollingerUpper',
+            algorithm: 'bollingerUpperBid',
             dashStyle: 'Dash',
 			id: 'bollingerupperbid',
 			color: '#008080'
@@ -386,7 +386,7 @@ $(function() {
 			linkedTo: 'dataseries2',
             showInLegend: true,
             type: 'trendline',
-            algorithm: 'bollingerLower',
+            algorithm: 'bollingerLowerBid',
             dashStyle: 'LongDash',
 			id: 'bollingerlowerbid',
 			color: '#008080'

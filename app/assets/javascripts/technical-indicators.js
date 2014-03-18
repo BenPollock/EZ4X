@@ -90,11 +90,17 @@
 		},
 
 		//Added by Ben Pollock to calculate Bollinger Upper & Lower
-		bollingerUpper: function(xData, yData, periods){
-			return bollingerUpper(xData, yData, bollinger_period);
+		bollingerUpperAsk: function(xData, yData, periods){
+			return bollingerUpperAsk(xData, yData, bollinger_period);
 		},
-		bollingerLower: function(xData, yData, periods){
-			return bollingerLower(xData, yData, bollinger_period);
+		bollingerLowerAsk: function(xData, yData, periods){
+			return bollingerLowerAsk(xData, yData, bollinger_period);
+		},
+		bollingerUpperBid: function(xData, yData, periods){
+			return bollingerUpperBid(xData, yData, bollinger_period);
+		},
+		bollingerLowerBid: function(xData, yData, periods){
+			return bollingerLowerBid(xData, yData, bollinger_period);
 		}
 
 	});
@@ -282,7 +288,7 @@
 
 
 	//Added by Ben Pollock to calculate Bollinger Upper
-	function bollingerUpper (xData, yData, periods){
+	function bollingerUpperAsk (xData, yData, periods){
 		var periodArr = [],
 			bollingerUpperLine = [],
 			length = yData.length;
@@ -299,10 +305,31 @@
 			}
 		}
 
+		BOL_upperask = bollingerUpperLine;
+		return bollingerUpperLine;
+	}
+	function bollingerUpperBid (xData, yData, periods){
+		var periodArr = [],
+			bollingerUpperLine = [],
+			length = yData.length;
+
+		var smLine = SMA(xData, yData, periods);
+
+		for (var i = 0; i < length; i ++){
+			periodArr.push(yData[i]);
+			if(periods == periodArr.length){
+				bollingerUpperLine.push([xData[i], smLine[i][1] + STDEV(periodArr)]);
+				periodArr.splice(0,1);
+			}else{
+				bollingerUpperLine.push([xData[i], null]);
+			}
+		}
+
+		BOL_upperbid = bollingerUpperLine;
 		return bollingerUpperLine;
 	}
 	//Added by Ben Pollock to calculate Bollinger Lower
-	function bollingerLower (xData, yData, periods){
+	function bollingerLowerAsk (xData, yData, periods){
 		var periodArr = [],
 			bollingerLowerLine = [],
 			length = yData.length;
@@ -319,6 +346,27 @@
 			}
 		}
 
+		BOL_lowerask = bollingerLowerLine;
+		return bollingerLowerLine;
+	}
+	function bollingerLowerBid (xData, yData, periods){
+		var periodArr = [],
+			bollingerLowerLine = [],
+			length = yData.length;
+
+		var smLine = SMA(xData, yData, periods);
+
+		for (var i = 0; i < length; i ++){
+			periodArr.push(yData[i]);
+			if(periods == periodArr.length){
+				bollingerLowerLine.push([xData[i], smLine[i][1] - STDEV(periodArr)]);
+				periodArr.splice(0,1);
+			}else{
+				bollingerLowerLine.push([xData[i], null]);
+			}
+		}
+
+		BOL_lowerbid = bollingerLowerLine;
 		return bollingerLowerLine;
 	}
 
