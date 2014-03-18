@@ -42,8 +42,6 @@ class TsessionsController < ApplicationController
 
 	def history
 		@user_history = current_user.tsessions
-		logger.info("poop")
-		logger.info(@user_history)
 	end
 
 end

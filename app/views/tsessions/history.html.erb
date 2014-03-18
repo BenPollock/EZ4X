@@ -1,0 +1,49 @@
+<nav class="navbar navbar-default" role="navigation">
+	 <div class="navbar-header">
+    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+      <span class="sr-only">Toggle navigation</span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </button>
+    <a class="navbar-brand" href="#">EZ4X</a>
+  </div>
+
+    <!-- Collect the nav links, forms, and other content for toggling -->
+  <div class="collapse navbar-collapse navbar-ex1-collapse">
+    <ul class="nav navbar-nav">
+      <li><a href="/">Forex Trader</a></li>
+      <li class="active"><a href="/history">Trade History</a></li>
+    </ul>
+    <ul class="nav navbar-nav navbar-right">
+      <li><a href="#">Welcome <%= current_user.email %></a></li>
+      <li><%= link_to 'Logout', destroy_user_session_path, :method=>'delete' %></li>
+    </ul>
+  </div><!-- /.navbar-collapse -->
+
+</nav>
+
+<div class="container">
+	<% @user_history.each do |session| %>
+		Starting Money: <%= session.cash %><br>
+		Currency Pair: EUR/USD<br>
+		Ending Money: <%= session.cash %><br>
+		Ending Borrowed: <%= session.borrowed %><br>
+		Last Time Modified: <%= session.updated_at %><br>
+		<u>Trades:</u><br>
+		<table class="table table-striped">
+			<tr>
+				<td>Units</td><td>Time</td>
+			</tr>
+			<% @trades = session.trades
+			   @trades.each do |trade| %>
+				<tr>
+				<td><%= trade.units %></td>
+				<td><%= trade.updated_at %></td>
+				</tr>
+			<% end %>
+		</table>
+	<% end %>
+	<br><br>
+	<h8><b>Client</b> © Ben Pollock 2014, <b>API</b> © Yufei Wang 2014</h8>
+</div>
